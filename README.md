@@ -18,6 +18,7 @@ features, it is recommended that you first describe your ideas in the
 separate issue.
 
 This github fork belongs to Hakan and Selen.
+All commits should be signed with GPG key.
 
 References
 ----------
