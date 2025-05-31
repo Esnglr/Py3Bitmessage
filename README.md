@@ -17,7 +17,7 @@ although if you plan to put a non-trivial amount of work into coding new
 features, it is recommended that you first describe your ideas in the
 separate issue.
 
-Feel welcome to join chan "bitmessage", BM-2cWy7cvHoq3f1rYMerRJp8PT653jjSuEdY
+This github fork belongs to Hakan and Selen.
 
 References
 ----------
