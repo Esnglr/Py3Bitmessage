@@ -6,21 +6,24 @@ import logging
 import re
 import socket
 import sys
+import os
 import time
 import random
 
-from . import asyncore_pollchoose as asyncore
-from . import knownnodes
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from network import asyncore_pollchoose as asyncore
+from network import knownnodes
 import protocol
 import state
 from bmconfigparser import config
-from .connectionchooser import chooseConnection
-from .node import Peer
-from .proxy import Proxy
-from .tcp import (
+from connectionchooser import chooseConnection
+from node import Peer
+from proxy import Proxy
+from tcp import (
     bootstrap, Socks4aBMConnection, Socks5BMConnection,
     TCPConnection, TCPServer)
-from .udp import UDPSocket
+from udp import UDPSocket
 
 logger = logging.getLogger('default')
 

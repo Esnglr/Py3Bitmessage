@@ -12,7 +12,7 @@ import os
 from binascii import hexlify
 
 try:
-    import pyelliptic
+    from cryptography.fernet import Fernet  #import pyelliptic
     from cryptography.hazmat.backends import default_backend
     from cryptography.hazmat.primitives.asymmetric import ec, padding
     from cryptography.hazmat.primitives import hashes

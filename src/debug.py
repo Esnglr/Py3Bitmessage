@@ -42,8 +42,8 @@ import sys
 
 from six.moves import configparser
 
-from . import helper_startup
-from . import state
+import helper_startup
+import state
 
 helper_startup.loadConfig()
 

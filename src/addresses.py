@@ -8,9 +8,9 @@ from binascii import hexlify, unhexlify
 from struct import pack, unpack
 
 try:
-    from .highlevelcrypto import double_sha512
+    from highlevelcrypto import double_sha512
 except ImportError:
-    from .highlevelcrypto import double_sha512
+    from highlevelcrypto import double_sha512
 
 
 logger = logging.getLogger('default')
