@@ -8,7 +8,7 @@ import time
 
 from PyQt4 import QtCore
 
-import account
+from . import account
 import defaults
 import network.stats
 import paths
@@ -16,12 +16,12 @@ import proofofwork
 import queues
 import state
 from bmconfigparser import config
-from foldertree import AccountMixin
+from .foldertree import AccountMixin
 from helper_sql import sqlExecute, sqlQuery
 from l10n import getTranslationLanguage
 from openclpow import openclEnabled
 from pyelliptic.openssl import OpenSSL
-from settings import getSOCKSProxyType
+from .settings import getSOCKSProxyType
 from version import softwareVersion
 from tr import _translate
 
@@ -149,7 +149,7 @@ def createSupportMessage(myapp):
     upnp = config.safeGet('bitmessagesettings', 'upnp', "N/A")
     connectedhosts = len(network.stats.connectedHostsList())
 
-    myapp.ui.textEditMessage.setText(unicode(SUPPORT_MESSAGE, 'utf-8').format(
+    myapp.ui.textEditMessage.setText(str(SUPPORT_MESSAGE, 'utf-8').format(
         version, os, architecture, pythonversion, opensslversion, frozen,
         portablemode, cpow, openclpow, locale, socks, upnp, connectedhosts))
 

@@ -72,16 +72,16 @@ def detectPrereqs(missing=True):
 def prereqToPackages():
     if not detectPrereqs():
         return
-    print("%s %s" % (
+    print(("%s %s" % (
         PACKAGE_MANAGER[detectOS()], " ".join(
-            PACKAGES[x][detectOS()] for x in detectPrereqs())))
+            PACKAGES[x][detectOS()] for x in detectPrereqs()))))
 
 
 def compilerToPackages():
     if not detectOS() in COMPILING:
         return
-    print("%s %s" % (
-        PACKAGE_MANAGER[detectOS.result], COMPILING[detectOS.result]))
+    print(("%s %s" % (
+        PACKAGE_MANAGER[detectOS.result], COMPILING[detectOS.result])))
 
 
 def testCompiler():
@@ -114,10 +114,10 @@ prereqs = detectPrereqs()
 compiler = testCompiler()
 
 if (not compiler or prereqs) and detectOS() in PACKAGE_MANAGER:
-    print(
+    print((
         "It looks like you're using %s. "
         "It is highly recommended to use the package manager\n"
-        "to install the missing dependencies." % detectOS.result)
+        "to install the missing dependencies." % detectOS.result))
 
 if not compiler:
     print(
@@ -128,16 +128,16 @@ if prereqs:
     mandatory = [x for x in prereqs if not PACKAGES[x].get("optional")]
     optional = [x for x in prereqs if PACKAGES[x].get("optional")]
     if mandatory:
-        print("Missing mandatory dependencies: %s" % " ".join(mandatory))
+        print(("Missing mandatory dependencies: %s" % " ".join(mandatory)))
     if optional:
-        print("Missing optional dependencies: %s" % " ".join(optional))
+        print(("Missing optional dependencies: %s" % " ".join(optional)))
         for package in optional:
-            print(PACKAGES[package].get('description'))
+            print((PACKAGES[package].get('description')))
 
 # Install the system dependencies of optional extras_require components
 OPSYS = detectOS()
 CMD = PACKAGE_MANAGER[OPSYS] if OPSYS in PACKAGE_MANAGER else 'UNKNOWN_INSTALLER'
-for lhs, rhs in EXTRAS_REQUIRE.items():
+for lhs, rhs in list(EXTRAS_REQUIRE.items()):
     if OPSYS is None:
         break
     if rhs and any([
@@ -159,13 +159,13 @@ for lhs, rhs in EXTRAS_REQUIRE.items():
                     if x in EXTRAS_REQUIRE_DEPS
                 ]),
             ])
-            print(
+            print((
                 "Optional dependency `pip install .[{}]` would require `{}`"
-                " to be run as root".format(lhs, rhs_cmd))
+                " to be run as root".format(lhs, rhs_cmd)))
 
 if detectOS.result == "Ubuntu 20":
-    print(
-        "Qt interface isn't supported in %s" % detectOS.result)
+    print((
+        "Qt interface isn't supported in %s" % detectOS.result))
 
 if (not compiler or prereqs) and OPSYS in PACKAGE_MANAGER:
     print("You can install the missing dependencies by running, as root:")

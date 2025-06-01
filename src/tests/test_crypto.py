@@ -30,10 +30,8 @@ _sha.update(sample_pubsigningkey + sample_pubencryptionkey)
 pubkey_sha = _sha.digest()
 
 
-class RIPEMD160TestCase(object):
+class RIPEMD160TestCase(object, metaclass=ABCMeta):
     """Base class for RIPEMD160 test case"""
-    # pylint: disable=too-few-public-methods,no-member
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def _hashdigest(self, data):

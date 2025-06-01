@@ -8,9 +8,9 @@ import hashlib
 from PyQt4 import QtCore, QtGui
 
 import queues
-import widgets
+from . import widgets
 import state
-from account import AccountMixin, GatewayAccount, MailchuckAccount, accountClass
+from .account import AccountMixin, GatewayAccount, MailchuckAccount, accountClass
 from addresses import addBMIfNotPresent, decodeAddress, encodeVarint
 from bmconfigparser import config as global_config
 from tr import _translate
@@ -259,7 +259,7 @@ class SpecialAddressBehaviorDialog(QtGui.QDialog):
                     self.radioButtonBehaveNormalAddress.click()
                 mailingListName = config.safeGet(self.address, 'mailinglistname', '')
                 self.lineEditMailingListName.setText(
-                    unicode(mailingListName, 'utf-8')
+                    str(mailingListName, 'utf-8')
                 )
 
         QtGui.QWidget.resize(self, QtGui.QWidget.sizeHint(self))

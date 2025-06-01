@@ -4,7 +4,7 @@ Thread for performing PoW
 # pylint: disable=protected-access,too-many-branches,too-many-statements
 # pylint: disable=no-self-use,too-many-lines,too-many-locals
 
-from __future__ import division
+
 
 import hashlib
 import time
@@ -15,23 +15,23 @@ from subprocess import call  # nosec
 from six.moves import configparser, queue
 from six.moves.reprlib import repr
 
-import defaults
-import helper_inbox
-import helper_msgcoding
-import helper_random
-import helper_sql
-import highlevelcrypto
-import l10n
-import proofofwork
-import protocol
-import queues
-import shared
-import state
-import tr
-from addresses import decodeAddress, decodeVarint, encodeVarint
-from bmconfigparser import config
-from helper_sql import sqlExecute, sqlQuery
-from network import StoppableThread, invQueue, knownnodes
+from . import defaults
+from . import helper_inbox
+from . import helper_msgcoding
+from . import helper_random
+from . import helper_sql
+from . import highlevelcrypto
+from . import l10n
+from . import proofofwork
+from . import protocol
+from . import queues
+from . import shared
+from . import state
+from . import tr
+from .addresses import decodeAddress, decodeVarint, encodeVarint
+from .bmconfigparser import config
+from .helper_sql import sqlExecute, sqlQuery
+from .network import StoppableThread, invQueue, knownnodes
 
 
 def sizeof_fmt(num, suffix='h/s'):

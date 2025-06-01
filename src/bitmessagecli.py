@@ -25,7 +25,7 @@ import time
 from six.moves import input as raw_input
 from six.moves import xmlrpc_client as xmlrpclib
 
-from bmconfigparser import config
+from .bmconfigparser import config
 
 
 api = ''
@@ -40,8 +40,8 @@ def userInput(message):
 
     global usrPrompt
 
-    print('\n' + message)
-    uInput = raw_input('> ')
+    print(('\n' + message))
+    uInput = input('> ')
 
     if uInput.lower() == 'exit':  # Returns the user to the main menu
         usrPrompt = 1
@@ -98,8 +98,8 @@ def configInit():
     with open(keysName, 'wb') as configfile:
         config.write(configfile)
 
-    print('\n     ' + str(keysName) + ' Initalized in the same directory as daemon.py')
-    print('     You will now need to configure the ' + str(keysName) + ' file.\n')
+    print(('\n     ' + str(keysName) + ' Initalized in the same directory as daemon.py'))
+    print(('     You will now need to configure the ' + str(keysName) + ' file.\n'))
 
 
 def apiInit(apiEnabled):
@@ -138,7 +138,7 @@ def apiInit(apiEnabled):
         return True
 
     else:  # API information was not present.
-        print('\n     ' + str(keysPath) + ' not properly configured!\n')
+        print(('\n     ' + str(keysPath) + ' not properly configured!\n'))
         uInput = userInput("Would you like to do this now, (Y)es or (N)o?").lower()
 
         if uInput == "y":  # User said yes, initalize the api by writing these values to the keys.dat file
@@ -305,23 +305,23 @@ def bmSettings():
     print('\n     -----------------------------------')
     print('     |   Current Bitmessage Settings   |')
     print('     -----------------------------------')
-    print('     port = ' + port)
-    print('     startonlogon = ' + str(startonlogon))
-    print('     minimizetotray = ' + str(minimizetotray))
-    print('     showtraynotifications = ' + str(showtraynotifications))
-    print('     startintray = ' + str(startintray))
-    print('     defaultnoncetrialsperbyte = ' + defaultnoncetrialsperbyte)
-    print('     defaultpayloadlengthextrabytes = ' + defaultpayloadlengthextrabytes)
-    print('     daemon = ' + str(daemon))
+    print(('     port = ' + port))
+    print(('     startonlogon = ' + str(startonlogon)))
+    print(('     minimizetotray = ' + str(minimizetotray)))
+    print(('     showtraynotifications = ' + str(showtraynotifications)))
+    print(('     startintray = ' + str(startintray)))
+    print(('     defaultnoncetrialsperbyte = ' + defaultnoncetrialsperbyte))
+    print(('     defaultpayloadlengthextrabytes = ' + defaultpayloadlengthextrabytes))
+    print(('     daemon = ' + str(daemon)))
     print('\n     ------------------------------------')
     print('     |   Current Connection Settings   |')
     print('     -----------------------------------')
-    print('     socksproxytype = ' + socksproxytype)
-    print('     sockshostname = ' + sockshostname)
-    print('     socksport = ' + socksport)
-    print('     socksauthentication = ' + str(socksauthentication))
-    print('     socksusername = ' + socksusername)
-    print('     sockspassword = ' + sockspassword)
+    print(('     socksproxytype = ' + socksproxytype))
+    print(('     sockshostname = ' + sockshostname))
+    print(('     socksport = ' + socksport))
+    print(('     socksauthentication = ' + str(socksauthentication)))
+    print(('     socksusername = ' + socksusername))
+    print(('     sockspassword = ' + sockspassword))
     print(' ')
 
     uInput = userInput("Would you like to modify any of these settings, (Y)es or (N)o?").lower()
@@ -333,60 +333,60 @@ def bmSettings():
             print(' ')
 
             if uInput == "port":
-                print('     Current port number: ' + port)
+                print(('     Current port number: ' + port))
                 uInput = userInput("Enter the new port number.")
                 config.set('bitmessagesettings', 'port', str(uInput))
             elif uInput == "startonlogon":
-                print('     Current status: ' + str(startonlogon))
+                print(('     Current status: ' + str(startonlogon)))
                 uInput = userInput("Enter the new status.")
                 config.set('bitmessagesettings', 'startonlogon', str(uInput))
             elif uInput == "minimizetotray":
-                print('     Current status: ' + str(minimizetotray))
+                print(('     Current status: ' + str(minimizetotray)))
                 uInput = userInput("Enter the new status.")
                 config.set('bitmessagesettings', 'minimizetotray', str(uInput))
             elif uInput == "showtraynotifications":
-                print('     Current status: ' + str(showtraynotifications))
+                print(('     Current status: ' + str(showtraynotifications)))
                 uInput = userInput("Enter the new status.")
                 config.set('bitmessagesettings', 'showtraynotifications', str(uInput))
             elif uInput == "startintray":
-                print('     Current status: ' + str(startintray))
+                print(('     Current status: ' + str(startintray)))
                 uInput = userInput("Enter the new status.")
                 config.set('bitmessagesettings', 'startintray', str(uInput))
             elif uInput == "defaultnoncetrialsperbyte":
-                print('     Current default nonce trials per byte: ' + defaultnoncetrialsperbyte)
+                print(('     Current default nonce trials per byte: ' + defaultnoncetrialsperbyte))
                 uInput = userInput("Enter the new defaultnoncetrialsperbyte.")
                 config.set('bitmessagesettings', 'defaultnoncetrialsperbyte', str(uInput))
             elif uInput == "defaultpayloadlengthextrabytes":
-                print('     Current default payload length extra bytes: ' + defaultpayloadlengthextrabytes)
+                print(('     Current default payload length extra bytes: ' + defaultpayloadlengthextrabytes))
                 uInput = userInput("Enter the new defaultpayloadlengthextrabytes.")
                 config.set('bitmessagesettings', 'defaultpayloadlengthextrabytes', str(uInput))
             elif uInput == "daemon":
-                print('     Current status: ' + str(daemon))
+                print(('     Current status: ' + str(daemon)))
                 uInput = userInput("Enter the new status.").lower()
                 config.set('bitmessagesettings', 'daemon', str(uInput))
             elif uInput == "socksproxytype":
-                print('     Current socks proxy type: ' + socksproxytype)
+                print(('     Current socks proxy type: ' + socksproxytype))
                 print("Possibilities: 'none', 'SOCKS4a', 'SOCKS5'.")
                 uInput = userInput("Enter the new socksproxytype.")
                 config.set('bitmessagesettings', 'socksproxytype', str(uInput))
             elif uInput == "sockshostname":
-                print('     Current socks host name: ' + sockshostname)
+                print(('     Current socks host name: ' + sockshostname))
                 uInput = userInput("Enter the new sockshostname.")
                 config.set('bitmessagesettings', 'sockshostname', str(uInput))
             elif uInput == "socksport":
-                print('     Current socks port number: ' + socksport)
+                print(('     Current socks port number: ' + socksport))
                 uInput = userInput("Enter the new socksport.")
                 config.set('bitmessagesettings', 'socksport', str(uInput))
             elif uInput == "socksauthentication":
-                print('     Current status: ' + str(socksauthentication))
+                print(('     Current status: ' + str(socksauthentication)))
                 uInput = userInput("Enter the new status.")
                 config.set('bitmessagesettings', 'socksauthentication', str(uInput))
             elif uInput == "socksusername":
-                print('     Current socks username: ' + socksusername)
+                print(('     Current socks username: ' + socksusername))
                 uInput = userInput("Enter the new socksusername.")
                 config.set('bitmessagesettings', 'socksusername', str(uInput))
             elif uInput == "sockspassword":
-                print('     Current socks password: ' + sockspassword)
+                print(('     Current socks password: ' + sockspassword))
                 uInput = userInput("Enter the new password.")
                 config.set('bitmessagesettings', 'sockspassword', str(uInput))
             else:
@@ -446,7 +446,7 @@ def subscribe():
     label = label.encode('base64')
 
     api.addSubscription(address, label)
-    print('\n     You are now subscribed to: ' + address + '\n')
+    print(('\n     You are now subscribed to: ' + address + '\n'))
 
 
 def unsubscribe():
@@ -468,7 +468,7 @@ def unsubscribe():
     userInput("Are you sure, (Y)es or (N)o?").lower()  # uInput =
 
     api.deleteSubscription(address)
-    print('\n     You are now unsubscribed from: ' + address + '\n')
+    print(('\n     You are now unsubscribed from: ' + address + '\n'))
 
 
 def listSubscriptions():
@@ -477,7 +477,7 @@ def listSubscriptions():
     global usrPrompt
     print('\nLabel, Address, Enabled\n')
     try:
-        print(api.listSubscriptions())
+        print((api.listSubscriptions()))
     except:  # noqa:E722
         print('\n     Connection Error\n')
         usrPrompt = 0
@@ -492,7 +492,7 @@ def createChan():
     password = userInput("Enter channel name")
     password = password.encode('base64')
     try:
-        print(api.createChan(password))
+        print((api.createChan(password)))
     except:  # noqa:E722
         print('\n     Connection Error\n')
         usrPrompt = 0
@@ -518,7 +518,7 @@ def joinChan():
     password = userInput("Enter channel name")
     password = password.encode('base64')
     try:
-        print(api.joinChan(password, address))
+        print((api.joinChan(password, address)))
     except:  # noqa:E722
         print('\n     Connection Error\n')
         usrPrompt = 0
@@ -542,7 +542,7 @@ def leaveChan():
             break
 
     try:
-        print(api.leaveChan(address))
+        print((api.leaveChan(address)))
     except:  # noqa:E722
         print('\n     Connection Error\n')
         usrPrompt = 0
@@ -574,7 +574,7 @@ def listAdd():
         if len(label) > 19:
             label = label[:16] + '...'
 
-        print(''.join([
+        print((''.join([
             '     |',
             str(addNum).ljust(3),
             '|',
@@ -586,13 +586,13 @@ def listAdd():
             '|',
             enabled.ljust(7),
             '|',
-        ]))
+        ])))
 
-    print(''.join([
+    print((''.join([
         '     ',
         74 * '-',
         '\n',
-    ]))
+    ])))
 
 
 def genAdd(lbl, deterministic, passphrase, numOfAdd, addVNum, streamNum, ripe):
@@ -648,7 +648,7 @@ def saveFile(fileName, fileData):
 
     with open(filePath, 'wb+') as path_to_file:
         path_to_file.write(fileData.decode("base64"))
-    print('\n     Successfully saved ' + filePath + '\n')
+    print(('\n     Successfully saved ' + filePath + '\n'))
 
 
 def attachment():
@@ -669,7 +669,7 @@ def attachment():
                 with open(filePath):
                     break
             except IOError:
-                print('\n     %s was not found on your filesystem or can not be opened.\n' % filePath)
+                print(('\n     %s was not found on your filesystem or can not be opened.\n' % filePath))
 
         # print(filesize, and encoding estimate with confirmation if file is over X size(1mb?))
         invSize = os.path.getsize(filePath)
@@ -677,11 +677,11 @@ def attachment():
         round(invSize, 2)  # Rounds to two decimal places
 
         if invSize > 500.0:  # If over 500KB
-            print(''.join([
+            print((''.join([
                 '\n     WARNING:The file that you are trying to attach is ',
                 invSize,
                 'KB and will take considerable time to send.\n'
-            ]))
+            ])))
             uInput = userInput('Are you sure you still want to attach it, (Y)es or (N)o?').lower()
 
             if uInput != "y":
@@ -830,7 +830,7 @@ def sendMsg(toAddress, fromAddress, subject, message):
 
     try:
         ackData = api.sendMessage(toAddress, fromAddress, subject, message)
-        print('\n     Message Status:', api.getStatus(ackData), '\n')
+        print(('\n     Message Status:', api.getStatus(ackData), '\n'))
     except:  # noqa:E722
         print('\n     Connection Error\n')
         usrPrompt = 0
@@ -903,7 +903,7 @@ def sendBrd(fromAddress, subject, message):
 
     try:
         ackData = api.sendBroadcast(fromAddress, subject, message)
-        print('\n     Message Status:', api.getStatus(ackData), '\n')
+        print(('\n     Message Status:', api.getStatus(ackData), '\n'))
     except:  # noqa:E722
         print('\n     Connection Error\n')
         usrPrompt = 0
@@ -929,15 +929,15 @@ def inbox(unreadOnly=False):
         # if we are displaying all messages or if this message is unread then display it
         if not unreadOnly or not message['read']:
             print('     -----------------------------------\n')
-            print('     Message Number:', msgNum)  # Message Number)
-            print('     To:', getLabelForAddress(message['toAddress']))  # Get the to address)
-            print('     From:', getLabelForAddress(message['fromAddress']))  # Get the from address)
-            print('     Subject:', message['subject'].decode('base64'))  # Get the subject)
-            print(''.join([
+            print(('     Message Number:', msgNum))  # Message Number)
+            print(('     To:', getLabelForAddress(message['toAddress'])))  # Get the to address)
+            print(('     From:', getLabelForAddress(message['fromAddress'])))  # Get the from address)
+            print(('     Subject:', message['subject'].decode('base64')))  # Get the subject)
+            print((''.join([
                 '     Received:',
                 datetime.datetime.fromtimestamp(
                     float(message['receivedTime'])).strftime('%Y-%m-%d %H:%M:%S'),
-            ]))
+            ])))
             messagesPrinted += 1
             if not message['read']:
                 messagesUnread += 1
@@ -946,7 +946,7 @@ def inbox(unreadOnly=False):
             userInput('(Press Enter to continue or type (Exit) to return to the main menu.)').lower()  # uInput =
 
     print('\n     -----------------------------------')
-    print('     There are %d unread messages of %d messages in the inbox.' % (messagesUnread, numMessages))
+    print(('     There are %d unread messages of %d messages in the inbox.' % (messagesUnread, numMessages)))
     print('     -----------------------------------\n')
 
 
@@ -964,32 +964,32 @@ def outbox():
 
     for msgNum in range(0, numMessages):  # processes all of the messages in the outbox
         print('\n     -----------------------------------\n')
-        print('     Message Number:', msgNum)  # Message Number)
+        print(('     Message Number:', msgNum))  # Message Number)
         # print('     Message ID:', outboxMessages['sentMessages'][msgNum]['msgid'])
-        print('     To:', getLabelForAddress(
+        print(('     To:', getLabelForAddress(
             outboxMessages['sentMessages'][msgNum]['toAddress']
-        ))  # Get the to address)
+        )))  # Get the to address)
         # Get the from address
-        print('     From:', getLabelForAddress(outboxMessages['sentMessages'][msgNum]['fromAddress']))
-        print('     Subject:', outboxMessages['sentMessages'][msgNum]['subject'].decode('base64'))  # Get the subject)
-        print('     Status:', outboxMessages['sentMessages'][msgNum]['status'])  # Get the subject)
+        print(('     From:', getLabelForAddress(outboxMessages['sentMessages'][msgNum]['fromAddress'])))
+        print(('     Subject:', outboxMessages['sentMessages'][msgNum]['subject'].decode('base64')))  # Get the subject)
+        print(('     Status:', outboxMessages['sentMessages'][msgNum]['status']))  # Get the subject)
 
         # print(''.join([
         #     '     Last Action Time:',
         #     datetime.datetime.fromtimestamp(
         #         float(outboxMessages['sentMessages'][msgNum]['lastActionTime'])).strftime('%Y-%m-%d %H:%M:%S'),
         # ]))
-        print(''.join([
+        print((''.join([
             '     Last Action Time:',
             datetime.datetime.fromtimestamp(
                 float(outboxMessages['sentMessages'][msgNum]['lastActionTime'])).strftime('%Y-%m-%d %H:%M:%S'),
-        ]))
+        ])))
 
         if msgNum % 20 == 0 and msgNum != 0:
             userInput('(Press Enter to continue or type (Exit) to return to the main menu.)').lower()  # uInput =
 
     print('\n     -----------------------------------')
-    print('     There are ', numMessages, ' messages in the outbox.')
+    print(('     There are ', numMessages, ' messages in the outbox.'))
     print('     -----------------------------------\n')
 
 
@@ -1044,16 +1044,16 @@ def readSentMsg(msgNum):
 
     # End attachment Detection
 
-    print('\n     To:', getLabelForAddress(outboxMessages['sentMessages'][msgNum]['toAddress']))  # Get the to address)
+    print(('\n     To:', getLabelForAddress(outboxMessages['sentMessages'][msgNum]['toAddress'])))  # Get the to address)
     # Get the from address
-    print('     From:', getLabelForAddress(outboxMessages['sentMessages'][msgNum]['fromAddress']))
-    print('     Subject:', outboxMessages['sentMessages'][msgNum]['subject'].decode('base64'))  # Get the subject)
-    print('     Status:', outboxMessages['sentMessages'][msgNum]['status'])  # Get the subject)
-    print(''.join([
+    print(('     From:', getLabelForAddress(outboxMessages['sentMessages'][msgNum]['fromAddress'])))
+    print(('     Subject:', outboxMessages['sentMessages'][msgNum]['subject'].decode('base64')))  # Get the subject)
+    print(('     Status:', outboxMessages['sentMessages'][msgNum]['status']))  # Get the subject)
+    print((''.join([
         '     Last Action Time:',
         datetime.datetime.fromtimestamp(
             float(outboxMessages['sentMessages'][msgNum]['lastActionTime'])).strftime('%Y-%m-%d %H:%M:%S'),
-    ]))
+    ])))
     print('     Message:\n')
     print(message)  # inboxMessages['inboxMessages'][msgNum]['message'].decode('base64'))
     print(' ')
@@ -1106,14 +1106,14 @@ def readMsg(msgNum):
             break
 
     # End attachment Detection
-    print('\n     To:', getLabelForAddress(inboxMessages['inboxMessages'][msgNum]['toAddress']))  # Get the to address)
+    print(('\n     To:', getLabelForAddress(inboxMessages['inboxMessages'][msgNum]['toAddress'])))  # Get the to address)
     # Get the from address
-    print('     From:', getLabelForAddress(inboxMessages['inboxMessages'][msgNum]['fromAddress']))
-    print('     Subject:', inboxMessages['inboxMessages'][msgNum]['subject'].decode('base64'))  # Get the subject)
-    print(''.join([
+    print(('     From:', getLabelForAddress(inboxMessages['inboxMessages'][msgNum]['fromAddress'])))
+    print(('     Subject:', inboxMessages['inboxMessages'][msgNum]['subject'].decode('base64')))  # Get the subject)
+    print((''.join([
         '     Received:', datetime.datetime.fromtimestamp(
             float(inboxMessages['inboxMessages'][msgNum]['receivedTime'])).strftime('%Y-%m-%d %H:%M:%S'),
-    ]))
+    ])))
     print('     Message:\n')
     print(message)  # inboxMessages['inboxMessages'][msgNum]['message'].decode('base64'))
     print(' ')
@@ -1280,7 +1280,7 @@ def listAddressBookEntries():
             address = entry['address']
             if len(label) > 19:
                 label = label[:16] + '...'
-            print('     | ' + label.ljust(19) + '| ' + address.ljust(37) + ' |')
+            print(('     | ' + label.ljust(19) + '| ' + address.ljust(37) + ' |'))
         print('     --------------------------------------------------------------')
     except:  # noqa:E722
         print('\n     Connection Error\n')
@@ -1401,11 +1401,11 @@ def clientStatus():
         usrPrompt = 0
         main()
 
-    print("\nnetworkStatus: " + client_status['networkStatus'] + "\n")
-    print("\nnetworkConnections: " + str(client_status['networkConnections']) + "\n")
-    print("\nnumberOfPubkeysProcessed: " + str(client_status['numberOfPubkeysProcessed']) + "\n")
-    print("\nnumberOfMessagesProcessed: " + str(client_status['numberOfMessagesProcessed']) + "\n")
-    print("\nnumberOfBroadcastsProcessed: " + str(client_status['numberOfBroadcastsProcessed']) + "\n")
+    print(("\nnetworkStatus: " + client_status['networkStatus'] + "\n"))
+    print(("\nnetworkConnections: " + str(client_status['networkConnections']) + "\n"))
+    print(("\nnumberOfPubkeysProcessed: " + str(client_status['numberOfPubkeysProcessed']) + "\n"))
+    print(("\nnumberOfMessagesProcessed: " + str(client_status['numberOfMessagesProcessed']) + "\n"))
+    print(("\nnumberOfBroadcastsProcessed: " + str(client_status['numberOfBroadcastsProcessed']) + "\n"))
 
 
 def shutdown():
@@ -1478,8 +1478,8 @@ def UI(usrInput):
 
         if 'success' in str(address_information['status']).lower():
             print(' Valid Address')
-            print(' Address Version: %s' % str(address_information['addressVersion']))
-            print(' Stream Number: %s' % str(address_information['streamNumber']))
+            print((' Address Version: %s' % str(address_information['addressVersion'])))
+            print((' Stream Number: %s' % str(address_information['streamNumber'])))
         else:
             print(' Invalid Address !')
 
@@ -1514,11 +1514,11 @@ def UI(usrInput):
 
             if isRipe == "y":
                 ripe = True
-                print(genAdd(lbl, deterministic, passphrase, numOfAdd, addVNum, streamNum, ripe))
+                print((genAdd(lbl, deterministic, passphrase, numOfAdd, addVNum, streamNum, ripe)))
                 main()
             elif isRipe == "n":
                 ripe = False
-                print(genAdd(lbl, deterministic, passphrase, numOfAdd, addVNum, streamNum, ripe))
+                print((genAdd(lbl, deterministic, passphrase, numOfAdd, addVNum, streamNum, ripe)))
                 main()
             elif isRipe == "exit":
                 usrPrompt = 1
@@ -1532,7 +1532,7 @@ def UI(usrInput):
             null = ''
             lbl = userInput('Enter the label for the new address.')
 
-            print(genAdd(lbl, deterministic, null, null, null, null, null))
+            print((genAdd(lbl, deterministic, null, null, null, null, null)))
             main()
 
         else:
@@ -1543,7 +1543,7 @@ def UI(usrInput):
         phrase = userInput("Enter the address passphrase.")
         print('\n     Working...\n')
         address = getAddress(phrase, 4, 1)  # ,vNumber,sNumber)
-        print('\n     Address: ' + address + '\n')
+        print(('\n     Address: ' + address + '\n'))
         usrPrompt = 1
         main()
 
@@ -1745,7 +1745,7 @@ def UI(usrInput):
                 if msgNum in ('a', 'all'):
                     print(' ')
                     for msgNum in range(0, numMessages):  # processes all of the messages in the inbox
-                        print('     Deleting message ', msgNum + 1, ' of ', numMessages)
+                        print(('     Deleting message ', msgNum + 1, ' of ', numMessages))
                         delMsg(0)
 
                     print('\n     Inbox is empty.')
@@ -1779,7 +1779,7 @@ def UI(usrInput):
                 if msgNum in ('a', 'all'):
                     print(' ')
                     for msgNum in range(0, numMessages):  # processes all of the messages in the outbox
-                        print('     Deleting message ', msgNum + 1, ' of ', numMessages)
+                        print(('     Deleting message ', msgNum + 1, ' of ', numMessages))
                         delSentMsg(0)
 
                     print('\n     Outbox is empty.')
@@ -1847,7 +1847,7 @@ def UI(usrInput):
         main()
 
     else:
-        print('\n     "', usrInput, '" is not a command.\n')
+        print(('\n     "', usrInput, '" is not a command.\n'))
         usrPrompt = 1
         main()
 
@@ -1880,7 +1880,7 @@ def main():
         usrPrompt = 2
 
     try:
-        UI((raw_input('>').lower()).replace(" ", ""))
+        UI((input('>').lower()).replace(" ", ""))
     except EOFError:
         UI("quit")
 

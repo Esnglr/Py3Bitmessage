@@ -3,8 +3,8 @@ Additional SQL helper for searching messages.
 Used by :mod:`.bitmessageqt`.
 """
 
-from helper_sql import sqlQuery
-from tr import _translate
+from .helper_sql import sqlQuery
+from .tr import _translate
 
 
 def search_sql(

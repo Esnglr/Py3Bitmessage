@@ -13,13 +13,13 @@ import time
 from email.header import decode_header
 from email.parser import Parser
 
-import queues
-from addresses import decodeAddress
-from bmconfigparser import config
-from helper_ackPayload import genAckPayload
-from helper_sql import sqlExecute
-from network.threads import StoppableThread
-from version import softwareVersion
+from . import queues
+from .addresses import decodeAddress
+from .bmconfigparser import config
+from .helper_ackPayload import genAckPayload
+from .helper_sql import sqlExecute
+from .network.threads import StoppableThread
+from .version import softwareVersion
 
 SMTPDOMAIN = "bmaddr.lan"
 LISTENPORT = 8425
@@ -158,7 +158,7 @@ class smtpServerPyBitmessage(smtpd.SMTPServer):
             msg_subject = "Subject missing..."
 
         msg_tmp = email.message_from_string(data)
-        body = u''
+        body = ''
         for part in msg_tmp.walk():
             if part and part.get_content_type() == "text/plain":
                 body += part.get_payload(decode=1).decode(part.get_content_charset('utf-8'), errors='replace')

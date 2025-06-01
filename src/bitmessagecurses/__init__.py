@@ -10,7 +10,7 @@ Bitmessage commandline interface
 #     * python2-pythondialog
 #  * dialog
 
-import ConfigParser
+import configparser
 import curses
 import os
 import sys
@@ -32,7 +32,6 @@ from bmconfigparser import config
 from helper_sql import sqlExecute, sqlQuery
 
 # pylint: disable=global-statement
-
 
 quit_ = False
 menutab = 1
@@ -96,7 +95,7 @@ errlog = errLog()
 def cpair(a):
     """Color pairs"""
     r = curses.color_pair(a)
-    if r not in range(1, curses.COLOR_PAIRS - 1):
+    if r not in list(range(1, curses.COLOR_PAIRS - 1)):
         r = curses.color_pair(0)
     return r
 
@@ -366,11 +365,11 @@ def handlech(c, stdscr):
                                 msg = ""
                                 for i, item in enumerate(data.split("\n")):
                                     msg += fill(item, replace_whitespace=False) + "\n"
-                                scrollbox(d, unicode(ascii(msg)), 30, 80)
+                                scrollbox(d, str(ascii(msg)), 30, 80)
                                 sqlExecute("UPDATE inbox SET read=1 WHERE msgid=?", inbox[inboxcur][0])
                                 inbox[inboxcur][7] = 1
                             else:
-                                scrollbox(d, unicode("Could not fetch message."))
+                                scrollbox(d, str("Could not fetch message."))
                         elif t == "2":       # Mark unread
                             sqlExecute("UPDATE inbox SET read=0 WHERE msgid=?", inbox[inboxcur][0])
                             inbox[inboxcur][7] = 0
@@ -384,7 +383,7 @@ def handlech(c, stdscr):
                                     ischan = True
                                     break
                             if not addresses[i][1]:  # pylint: disable=undefined-loop-variable
-                                scrollbox(d, unicode(
+                                scrollbox(d, str(
                                     "Sending address disabled, please either enable it"
                                     "or choose a different address."))
                                 return
@@ -416,7 +415,7 @@ def handlech(c, stdscr):
                                     addrbook.append([label, addr])
                                     addrbook.reverse()
                             else:
-                                scrollbox(d, unicode("The selected address is already in the Address Book."))
+                                scrollbox(d, str("The selected address is already in the Address Book."))
                         elif t == "5":      # Save message
                             set_background_title(d, "Save \"" + inbox[inboxcur][5] + "\" as text file")
                             r, t = d.inputbox("Filename", init=inbox[inboxcur][5] + ".txt")
@@ -430,11 +429,11 @@ def handlech(c, stdscr):
                                     fh.write(msg)
                                     fh.close()
                                 else:
-                                    scrollbox(d, unicode("Could not fetch message."))
+                                    scrollbox(d, str("Could not fetch message."))
                         elif t == "6":       # Move to trash
                             sqlExecute("UPDATE inbox SET folder='trash' WHERE msgid=?", inbox[inboxcur][0])
                             del inbox[inboxcur]
-                            scrollbox(d, unicode(
+                            scrollbox(d, str(
                                 "Message moved to trash. There is no interface to view your trash,"
                                 " \nbut the message is still on disk if you are desperate to recover it."))
                 elif menutab == 2:
@@ -472,16 +471,16 @@ def handlech(c, stdscr):
                                 msg = ""
                                 for i, item in enumerate(data.split("\n")):
                                     msg += fill(item, replace_whitespace=False) + "\n"
-                                scrollbox(d, unicode(ascii(msg)), 30, 80)
+                                scrollbox(d, str(ascii(msg)), 30, 80)
                             else:
-                                scrollbox(d, unicode("Could not fetch message."))
+                                scrollbox(d, str("Could not fetch message."))
                         elif t == "2":       # Move to trash
                             sqlExecute(
                                 "UPDATE sent SET folder='trash' WHERE subject=? AND ackdata=?",
                                 sentbox[sentcur][4],
                                 sentbox[sentcur][6])
                             del sentbox[sentcur]
-                            scrollbox(d, unicode(
+                            scrollbox(d, str(
                                 "Message moved to trash. There is no interface to view your trash"
                                 " \nbut the message is still on disk if you are desperate to recover it."))
                 elif menutab == 4:
@@ -506,7 +505,7 @@ def handlech(c, stdscr):
                         if t == "1":         # Create new address
                             set_background_title(d, "Create new address")
                             scrollbox(
-                                d, unicode(
+                                d, str(
                                     "Here you may generate as many addresses as you like.\n"
                                     "Indeed, creating and abandoning addresses is encouraged.\n"
                                     "Deterministic addresses have several pros and cons:\n"
@@ -595,7 +594,7 @@ def handlech(c, stdscr):
                                                 if r == d.DIALOG_OK and "1" in t:
                                                     shorten = True
                                                 scrollbox(
-                                                    d, unicode(
+                                                    d, str(
                                                         "In addition to your passphrase, be sure to remember the"
                                                         " following numbers:\n"
                                                         "\n  * Address version number: " + str(4) + "\n"
@@ -605,7 +604,7 @@ def handlech(c, stdscr):
                                                      "unused deterministic address", number,
                                                      str(passphrase), shorten))
                                         else:
-                                            scrollbox(d, unicode("Passphrases do not match"))
+                                            scrollbox(d, str("Passphrases do not match"))
                         elif t == "2":      # Send a message
                             a = ""
                             if addresses[addrcur][3] != 0:       # if current address is a chan
@@ -653,7 +652,7 @@ def handlech(c, stdscr):
                             a = addresses[addrcur][2]
                             set_background_title(d, "Special address behavior")
                             if config.safeGetBoolean(a, "chan"):
-                                scrollbox(d, unicode(
+                                scrollbox(d, str(
                                     "This is a chan address. You cannot use it as a pseudo-mailing list."))
                             else:
                                 m = config.safeGetBoolean(a, "mailinglist")
@@ -672,7 +671,7 @@ def handlech(c, stdscr):
                                     elif t == "2" and m is False:
                                         try:
                                             mn = config.get(a, "mailinglistname")
-                                        except ConfigParser.NoOptionError:
+                                        except configparser.NoOptionError:
                                             mn = ""
                                         r, t = d.inputbox("Mailing list name", init=mn)
                                         if r == d.DIALOG_OK:
@@ -777,7 +776,7 @@ def handlech(c, stdscr):
                                         addrbook.append([t, addr])
                                         addrbook.reverse()
                                 else:
-                                    scrollbox(d, unicode("The selected address is already in the Address Book."))
+                                    scrollbox(d, str("The selected address is already in the Address Book."))
                         elif t == "4":
                             r, t = d.inputbox("Type in \"I want to delete this Address Book entry\"")
                             if r == d.DIALOG_OK and t == "I want to delete this Address Book entry":
@@ -943,12 +942,12 @@ def sendMessage(sender="", recv="", broadcast=None, subject="", body="", reply=F
                                 " the software of your acquaintance.")
                     else:
                         err += "It is unknown what is wrong with the address."
-                    scrollbox(d, unicode(err))
+                    scrollbox(d, str(err))
                 else:
                     addr = addBMIfNotPresent(addr)
                     if version > 4 or version <= 1:
                         set_background_title(d, "Recipient address error")
-                        scrollbox(d, unicode(
+                        scrollbox(d, str(
                             "Could not understand version number " +
                             version +
                             "of address" +
@@ -957,20 +956,20 @@ def sendMessage(sender="", recv="", broadcast=None, subject="", body="", reply=F
                         continue
                     if stream > 1 or stream == 0:
                         set_background_title(d, "Recipient address error")
-                        scrollbox(d, unicode(
+                        scrollbox(d, str(
                             "Bitmessage currently only supports stream numbers of 1,"
                             "unlike as requested for address " + addr + "."))
                         continue
                     if not network.stats.connectedHostsList():
                         set_background_title(d, "Not connected warning")
-                        scrollbox(d, unicode("Because you are not currently connected to the network, "))
+                        scrollbox(d, str("Because you are not currently connected to the network, "))
                     helper_sent.insert(
                         toAddress=addr, fromAddress=sender, subject=subject, message=body)
                     queues.workerQueue.put(("sendmessage", addr))
     else:       # Broadcast
         if recv == "":
             set_background_title(d, "Empty sender error")
-            scrollbox(d, unicode("You must specify an address to send the message from."))
+            scrollbox(d, str("You must specify an address to send the message from."))
         else:
             # dummy ackdata, no need for stealth
             helper_sent.insert(

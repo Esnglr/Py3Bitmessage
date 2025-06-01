@@ -14,12 +14,12 @@ import sys
 
 
 try:
-    import pathmagic
+    from . import pathmagic
 except ImportError:
     from pybitmessage import pathmagic
 app_dir = pathmagic.setup()
 
-import depends
+from . import depends
 depends.check_dependencies()
 
 import getopt
@@ -30,21 +30,21 @@ import threading
 import time
 import traceback
 
-import defaults
+from . import defaults
 # Network subsystem
-import network
-import shutdown
-import state
+from . import network
+from . import shutdown
+from . import state
 
-from testmode_init import populate_api_test_data
-from bmconfigparser import config
-from debug import logger  # this should go before any threads
-from helper_startup import (
+from .testmode_init import populate_api_test_data
+from .bmconfigparser import config
+from .debug import logger  # this should go before any threads
+from .helper_startup import (
     adjustHalfOpenConnectionsLimit, fixSocket, start_proxyconfig)
-from inventory import Inventory
-from singleinstance import singleinstance
+from .inventory import Inventory
+from .singleinstance import singleinstance
 # Synchronous threads
-from threads import (
+from .threads import (
     set_thread_name, printLock,
     addressGenerator, objectProcessor, singleCleaner, singleWorker, sqlThread)
 
@@ -71,11 +71,11 @@ def signal_handler(signum, frame):
     if state.thisapp.daemon or not state.enableGUI:
         shutdown.doCleanShutdown()
     else:
-        print('# Thread: %s(%d)' % (thread.name, thread.ident))
+        print(('# Thread: %s(%d)' % (thread.name, thread.ident)))
         for filename, lineno, name, line in traceback.extract_stack(frame):
-            print('File: "%s", line %d, in %s' % (filename, lineno, name))
+            print(('File: "%s", line %d, in %s' % (filename, lineno, name)))
             if line:
-                print('  %s' % line.strip())
+                print(('  %s' % line.strip()))
         print('Unfortunately you cannot use Ctrl+C when running the UI'
               ' because the UI captures the signal.')
 
@@ -196,20 +196,20 @@ class Main(object):
             # SMTP delivery thread
             if daemon and config.safeGet(
                     'bitmessagesettings', 'smtpdeliver', '') != '':
-                from class_smtpDeliver import smtpDeliver
+                from .class_smtpDeliver import smtpDeliver
                 smtpDeliveryThread = smtpDeliver()
                 smtpDeliveryThread.start()
 
             # SMTP daemon thread
             if daemon and config.safeGetBoolean(
                     'bitmessagesettings', 'smtpd'):
-                from class_smtpServer import smtpServer
+                from .class_smtpServer import smtpServer
                 smtpServerThread = smtpServer()
                 smtpServerThread.start()
 
             # API is also objproc dependent
             if config.safeGetBoolean('bitmessagesettings', 'apienabled'):
-                import api  # pylint: disable=relative-import
+                from . import api  # pylint: disable=relative-import
                 singleAPIThread = api.singleAPI()
                 # close the main program even if there are threads left
                 singleAPIThread.daemon = True
@@ -227,7 +227,7 @@ class Main(object):
             network.start(config, state)
 
             if config.safeGetBoolean('bitmessagesettings', 'upnp'):
-                import upnp
+                from . import upnp
                 upnpThread = upnp.uPnPThread()
                 upnpThread.start()
         else:
@@ -238,10 +238,10 @@ class Main(object):
                 if not depends.check_curses():
                     sys.exit()
                 print('Running with curses')
-                import bitmessagecurses
+                from . import bitmessagecurses
                 bitmessagecurses.runwrapper()
             else:
-                import bitmessageqt
+                from . import bitmessageqt
                 bitmessageqt.run()
         else:
             config.remove_option('bitmessagesettings', 'dontconnect')
@@ -261,7 +261,7 @@ class Main(object):
             state.enableGUI = True
             try:
                 # pylint: disable=relative-import
-                from tests import core as test_core
+                from .tests import core as test_core
             except ImportError:
                 try:
                     from pybitmessage.tests import core as test_core
@@ -338,7 +338,7 @@ class Main(object):
     @staticmethod
     def usage():
         """Displaying the usages"""
-        print('Usage: ' + sys.argv[0] + ' [OPTIONS]')
+        print(('Usage: ' + sys.argv[0] + ' [OPTIONS]'))
         print('''
 Options:
   -h, --help            show this help message and exit

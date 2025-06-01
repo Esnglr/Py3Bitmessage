@@ -1,9 +1,9 @@
 """The Inventory"""
 
 # TODO make this dynamic, and watch out for frozen, like with messagetypes
-import storage.filesystem
-import storage.sqlite
-from bmconfigparser import config
+from . import storage.filesystem
+from . import storage.sqlite
+from .bmconfigparser import config
 
 
 def create_inventory_instance(backend="sqlite"):

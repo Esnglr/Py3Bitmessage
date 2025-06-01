@@ -92,7 +92,7 @@ class ECC(object):
         """
         Static method, returns the list of all the curves available
         """
-        return OpenSSL.curves.keys()
+        return list(OpenSSL.curves.keys())
 
     def get_curve(self):
         """The name of currently used curve"""

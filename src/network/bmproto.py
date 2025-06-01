@@ -15,7 +15,6 @@ import addresses
 import knownnodes
 import protocol
 import state
-import connectionpool
 from bmconfigparser import config
 from queues import objectProcessorQueue
 from randomtrackingdict import RandomTrackingDict
@@ -440,6 +439,7 @@ class BMProto(AdvancedDispatcher, ObjectTracker):
         return self.decode_payload_content("LQIQ16sH")
 
     def bm_command_addr(self):
+        import connectionpool
         """Incoming addresses, process them"""
         # not using services
         for seenTime, stream, _, ip, port in self._decode_addr():
@@ -508,6 +508,7 @@ class BMProto(AdvancedDispatcher, ObjectTracker):
         return False
 
     def bm_command_version(self):
+        import connectionpool
         """
         Incoming version.
         Parse and log, remember important things, like streams, bitfields, etc.
@@ -557,6 +558,7 @@ class BMProto(AdvancedDispatcher, ObjectTracker):
 
     # pylint: disable=too-many-return-statements
     def peerValidityChecks(self):
+        import connectionpool
         """Check the validity of the peer"""
         if self.remoteProtocolVersion < 3:
             self.append_write_buf(protocol.assembleErrorMessage(
@@ -640,6 +642,7 @@ class BMProto(AdvancedDispatcher, ObjectTracker):
 
     @staticmethod
     def stopDownloadingObject(hashId, forwardAnyway=False):
+        import connectionpool
         """Stop downloading object *hashId*"""
         for connection in connectionpool.pool.connections():
             try:

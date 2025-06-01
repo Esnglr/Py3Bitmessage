@@ -5,7 +5,7 @@ Some shared functions
   Should be moved to different places and this file removed,
   but it needs refactoring.
 """
-from __future__ import division
+
 
 # Libraries.
 import hashlib
@@ -18,12 +18,12 @@ from binascii import hexlify
 from six.moves.reprlib import repr
 
 # Project imports.
-import highlevelcrypto
-import state
-from addresses import decodeAddress, encodeVarint
-from bmconfigparser import config
-from debug import logger
-from helper_sql import sqlQuery
+from . import highlevelcrypto
+from . import state
+from .addresses import decodeAddress, encodeVarint
+from .bmconfigparser import config
+from .debug import logger
+from .helper_sql import sqlQuery
 
 myECCryptorObjects = {}
 MyECSubscriptionCryptorObjects = {}

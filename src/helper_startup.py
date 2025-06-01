@@ -10,7 +10,7 @@ import platform
 import socket
 import sys
 import time
-from distutils.version import StrictVersion
+from packaging.version import Version
 from struct import pack
 from six.moves import configparser
 
@@ -21,8 +21,8 @@ try:
     import state
     from bmconfigparser import config, config_ready
 except ImportError:
-    from . import defaults, helper_random, paths, state
-    from .bmconfigparser import config, config_ready
+    import defaults, helper_random, paths, state
+    from bmconfigparser import config, config_ready
 
 try:
     from plugins.plugin import get_plugin
@@ -277,10 +277,10 @@ def adjustHalfOpenConnectionsLimit():
         if sys.platform[0:3] == "win":
             # Some XP and Vista systems can only have 10 outgoing
             # connections at a time.
-            VER_THIS = StrictVersion(platform.version())
+            VER_THIS = Version(platform.version())
             is_limited = (
-                StrictVersion("5.1.2600") <= VER_THIS
-                and StrictVersion("6.0.6000") >= VER_THIS
+                Version("5.1.2600") <= VER_THIS
+                and Version("6.0.6000") >= VER_THIS
             )
     except ValueError:
         pass

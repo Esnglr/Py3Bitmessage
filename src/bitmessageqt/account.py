@@ -7,7 +7,7 @@ Account related functions.
 
 """
 
-from __future__ import absolute_import
+
 
 import inspect
 import re
@@ -150,7 +150,7 @@ class BMAccount(object):
 
         self.toAddress = toAddress
         self.fromAddress = fromAddress
-        if isinstance(subject, unicode):
+        if isinstance(subject, str):
             self.subject = str(subject)
         else:
             self.subject = subject

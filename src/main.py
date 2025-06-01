@@ -5,12 +5,12 @@
 
 import os
 from kivy.config import Config
-from mockbm import multiqueue
-import state
+from .mockbm import multiqueue
+from . import state
 
-from mockbm.class_addressGenerator import FakeAddressGenerator  # noqa:E402
-from bitmessagekivy.mpybit import NavigateApp  # noqa:E402
-from mockbm import network  # noqa:E402
+from .mockbm.class_addressGenerator import FakeAddressGenerator  # noqa:E402
+from .bitmessagekivy.mpybit import NavigateApp  # noqa:E402
+from .mockbm import network  # noqa:E402
 
 stats = network.stats
 objectracker = network.objectracker

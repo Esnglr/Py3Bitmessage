@@ -2,8 +2,8 @@
 Insert value into addressbook
 """
 
-from bmconfigparser import config
-from helper_sql import sqlExecute
+from .bmconfigparser import config
+from .helper_sql import sqlExecute
 
 
 def insert(address, label):

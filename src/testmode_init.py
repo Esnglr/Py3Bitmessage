@@ -1,8 +1,8 @@
 import time
 import uuid
 
-import helper_inbox
-import helper_sql
+from . import helper_inbox
+from . import helper_sql
 
 # from .tests.samples import sample_inbox_msg_ids, sample_deterministic_addr4
 sample_deterministic_addr4 = 'BM-2cWzSnwjJ7yRP3nLEWUV5LisTZyREWSzUK'

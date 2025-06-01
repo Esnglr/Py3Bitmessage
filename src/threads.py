@@ -15,11 +15,11 @@ There are also other threads in the `.network` package.
 
 import threading
 
-from class_addressGenerator import addressGenerator
-from class_objectProcessor import objectProcessor
-from class_singleCleaner import singleCleaner
-from class_singleWorker import singleWorker
-from class_sqlThread import sqlThread
+from .class_addressGenerator import addressGenerator
+from .class_objectProcessor import objectProcessor
+from .class_singleCleaner import singleCleaner
+from .class_singleWorker import singleWorker
+from .class_sqlThread import sqlThread
 
 try:
     import prctl

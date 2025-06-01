@@ -4,12 +4,12 @@ Announce myself (node address)
 import time
 
 # magic imports!
-import connectionpool
+from . import connectionpool
 from bmconfigparser import config
 from protocol import assembleAddrMessage
 
-from node import Peer
-from threads import StoppableThread
+from .node import Peer
+from .threads import StoppableThread
 
 
 class AnnounceThread(StoppableThread):
@@ -30,7 +30,7 @@ class AnnounceThread(StoppableThread):
     @staticmethod
     def announceSelf():
         """Announce our presence"""
-        for connection in connectionpool.pool.udpSockets.values():
+        for connection in list(connectionpool.pool.udpSockets.values()):
             if not connection.announcing:
                 continue
             for stream in connectionpool.pool.streams:

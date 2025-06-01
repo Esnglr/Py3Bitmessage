@@ -6,7 +6,6 @@ import time
 
 import protocol
 import state
-import connectionpool
 from network import dandelion_ins
 from highlevelcrypto import calculateInventoryHash
 
@@ -94,6 +93,7 @@ class BMObject(object):
             raise BMObjectExpiredError()
 
     def checkStream(self):
+        import connectionpool
         """Check if object's stream matches streams we are interested in"""
         if self.streamNumber < protocol.MIN_VALID_STREAM \
            or self.streamNumber > protocol.MAX_VALID_STREAM:

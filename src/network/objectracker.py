@@ -4,7 +4,6 @@ Module for tracking objects
 import time
 from threading import RLock
 
-import connectionpool
 from network import dandelion_ins
 from randomtrackingdict import RandomTrackingDict
 
@@ -75,7 +74,7 @@ class ObjectTracker(object):
                 with self.objectsNewToThemLock:
                     self.objectsNewToThem = {
                         k: v
-                        for k, v in self.objectsNewToThem.iteritems()
+                        for k, v in self.objectsNewToThem.items()
                         if v >= deadline}
             self.lastCleaned = time.time()
 
@@ -99,6 +98,7 @@ class ObjectTracker(object):
         self.objectsNewToMe[hashId] = True
 
     def handleReceivedObject(self, streamNumber, hashid):
+        import connectionpool
         """Handling received object"""
         for i in connectionpool.pool.connections():
             if not i.fullyEstablished:
