@@ -13,6 +13,12 @@ from binascii import hexlify
 
 try:
     import pyelliptic
+    from cryptography.hazmat.backends import default_backend
+    from cryptography.hazmat.primitives.asymmetric import ec, padding
+    from cryptography.hazmat.primitives import hashes
+    from cryptography.hazmat.primitives import serialization
+    from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+
     from fallback import RIPEMD160Hash
     from pyelliptic import OpenSSL
     from pyelliptic import arithmetic as a
@@ -162,77 +168,200 @@ def pointMult(secret):
 
 # Encryption
 
-def makeCryptor(privkey, curve='secp256k1'):
-    """Return a private `.pyelliptic.ECC` instance"""
-    private_key = a.changebase(privkey, 16, 256, minlen=32)
-    public_key = pointMult(private_key)
-    cryptor = pyelliptic.ECC(
-        pubkey_x=public_key[1:-32], pubkey_y=public_key[-32:],
-        raw_privkey=private_key, curve=curve)
-    return cryptor
+#def makeCryptor(privkey, curve='secp256k1'):
+#    """Return a private `.pyelliptic.ECC` instance"""
+#    private_key = a.changebase(privkey, 16, 256, minlen=32)
+#    public_key = pointMult(private_key)
+#    cryptor = pyelliptic.ECC(
+#        pubkey_x=public_key[1:-32], pubkey_y=public_key[-32:],
+#        raw_privkey=private_key, curve=curve)
+#    return cryptor
 
+def makeCryptor(privkey, curve=ec.SECP256K1()):
+    """Return a private ECC instance using pyca/cryptography"""
+    # Convert the hex private key to bytes
+    private_key_bytes = bytes.fromhex(privkey)
+
+    # Create a private key object
+    private_key = ec.derive_private_key(int.from_bytes(private_key_bytes, byteorder='big'), curve, default_backend())
+
+    # Get the public key
+    public_key = private_key.public_key()
+
+    return private_key, public_key
+
+#def makePubCryptor(pubkey):
+#    """Return a public `.pyelliptic.ECC` instance"""
+#    pubkey_bin = hexToPubkey(pubkey)
+#    return pyelliptic.ECC(curve='secp256k1', pubkey=pubkey_bin)
+#
+
+def hexToPubkey(pubkey):
+    """Convert a hex public key to bytes."""
+    return bytes.fromhex(pubkey)
+
+def hexToPrivkey(privkey):
+    """Convert a hex private key to bytes."""
+    return bytes.fromhex(privkey)
 
 def makePubCryptor(pubkey):
-    """Return a public `.pyelliptic.ECC` instance"""
+    """Return a public ECC instance using pyca/cryptography"""
     pubkey_bin = hexToPubkey(pubkey)
-    return pyelliptic.ECC(curve='secp256k1', pubkey=pubkey_bin)
+
+    # Create a public key object from the bytes
+    public_key = ec.EllipticCurvePublicKey.from_encoded_point(ec.SECP256K1(), pubkey_bin)
+
+    return public_key
+
+#def encrypt(msg, hexPubkey):
+#    """Encrypts message with hex public key"""
+#    return pyelliptic.ECC(curve='secp256k1').encrypt(
+#        msg, hexToPubkey(hexPubkey))
 
 
 def encrypt(msg, hexPubkey):
     """Encrypts message with hex public key"""
-    return pyelliptic.ECC(curve='secp256k1').encrypt(
-        msg, hexToPubkey(hexPubkey))
+    # Convert the message to bytes
+    message_bytes = msg.encode('utf-8')
 
+    # Load the public key
+    pubkey_bin = hexToPubkey(hexPubkey)
+    public_key = ec.EllipticCurvePublicKey.from_encoded_point(ec.SECP256K1(), pubkey_bin)
 
-def decrypt(msg, hexPrivkey):
+    # Generate a symmetric key for encryption
+    symmetric_key = os.urandom(32)  # Example: 256-bit key
+
+    # Encrypt the message using a symmetric encryption algorithm (e.g., AES)
+    # Here, we will use a simple example with AES-GCM (you can choose your preferred method)
+    from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+
+    # Create a random nonce
+    nonce = os.urandom(12)  # 96-bit nonce for AES-GCM
+    cipher = Cipher(algorithms.AES(symmetric_key), modes.GCM(nonce), backend=default_backend())
+    encryptor = cipher.encryptor()
+    ciphertext = encryptor.update(message_bytes) + encryptor.finalize()
+
+    # Encrypt the symmetric key with the public key
+    encrypted_symmetric_key = public_key.encrypt(
+        symmetric_key,
+        ec.ECIES(algorithm=hashes.SHA256(), padding=padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()), algorithm=hashes.SHA256(), label=None))
+    )
+
+    return {
+        'ciphertext': ciphertext,
+        'nonce': nonce,
+        'encrypted_symmetric_key': encrypted_symmetric_key,
+    }
+
+#def decrypt(msg, hexPrivkey):
+#    """Decrypts message with hex private key"""
+#    return makeCryptor(hexPrivkey).decrypt(msg)
+
+def decrypt(encrypted_data, hexPrivkey):
     """Decrypts message with hex private key"""
-    return makeCryptor(hexPrivkey).decrypt(msg)
+    # Extract the encrypted symmetric key, ciphertext, and nonce
+    encrypted_symmetric_key = encrypted_data['encrypted_symmetric_key']
+    ciphertext = encrypted_data['ciphertext']
+    nonce = encrypted_data['nonce']
 
+    # Convert the hex private key to bytes
+    private_key_bytes = hexToPrivkey(hexPrivkey)
 
-def decryptFast(msg, cryptor):
-    """Decrypts message with an existing `.pyelliptic.ECC` object"""
-    return cryptor.decrypt(msg)
+    # Create a private key object
+    private_key = ec.derive_private_key(int.from_bytes(private_key_bytes, byteorder='big'), ec.SECP256K1(), default_backend())
 
+    # Decrypt the symmetric key using the private key
+    symmetric_key = private_key.decrypt(
+        encrypted_symmetric_key,
+        ec.ECIES(algorithm=hashes.SHA256(), padding=padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()), algorithm=hashes.SHA256(), label=None))
+    )
+
+    # Decrypt the message using the symmetric key
+    cipher = Cipher(algorithms.AES(symmetric_key), modes.GCM(nonce), backend=default_backend())
+    decryptor = cipher.decryptor()
+    decrypted_message = decryptor.update(ciphertext) + decryptor.finalize()
+
+    return decrypted_message.decode('utf-8')
+
+#def decryptFast(msg, cryptor):
+#    """Decrypts message with an existing `.pyelliptic.ECC` object"""
+#    return cryptor.decrypt(msg)
+
+def decryptFast(encrypted_data, private_key):
+    """Decrypts message with an existing `EllipticCurvePrivateKey` object"""
+    # Extract the encrypted symmetric key, ciphertext, and nonce
+    encrypted_symmetric_key = encrypted_data['encrypted_symmetric_key']
+    ciphertext = encrypted_data['ciphertext']
+    nonce = encrypted_data['nonce']
+
+    # Decrypt the symmetric key using the private key
+    symmetric_key = private_key.decrypt(
+        encrypted_symmetric_key,
+        ec.ECIES(algorithm=hashes.SHA256(), padding=padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()), algorithm=hashes.SHA256(), label=None))
+    )
+
+    # Decrypt the message using the symmetric key
+    cipher = Cipher(algorithms.AES(symmetric_key), modes.GCM(nonce), backend=default_backend())
+    decryptor = cipher.decryptor()
+    decrypted_message = decryptor.update(ciphertext) + decryptor.finalize()
+
+    return decrypted_message.decode('utf-8')
 
 # Signatures
 
-def _choose_digest_alg(name):
-    """
-    Choose openssl digest constant by name raises ValueError if not appropriate
-    """
-    if name not in ("sha1", "sha256"):
-        raise ValueError("Unknown digest algorithm %s" % name)
-    return (
-        # SHA1, this will eventually be deprecated
-        OpenSSL.digest_ecdsa_sha1 if name == "sha1" else OpenSSL.EVP_sha256)
-
+def _choose_digest_alg(digestAlg):
+    """Choose the appropriate digest algorithm based on the input."""
+    if digestAlg.lower() == "sha1":
+        return hashes.SHA1()
+    elif digestAlg.lower() == "sha256":
+        return hashes.SHA256()
+    else:
+        raise ValueError("Unsupported digest algorithm. Use 'sha1' or 'sha256'.")
 
 def sign(msg, hexPrivkey, digestAlg="sha256"):
     """
     Signs with hex private key using SHA1 or SHA256 depending on
     *digestAlg* keyword.
     """
-    return makeCryptor(hexPrivkey).sign(
-        msg, digest_alg=_choose_digest_alg(digestAlg))
+    # Create the cryptor (private key) using the new makeCryptor function
+    private_key, _ = makeCryptor(hexPrivkey)
+
+    # Choose the appropriate digest algorithm
+    digest_algorithm = _choose_digest_alg(digestAlg)
+
+    # Sign the message
+    signature = private_key.sign(
+        msg.encode('utf-8'),  # Convert message to bytes
+        ec.ECDSA(digest_algorithm)
+    )
+
+    return signature
 
 
 def verify(msg, sig, hexPubkey, digestAlg=None):
     """Verifies with hex public key using SHA1 or SHA256"""
-    # As mentioned above, we must upgrade gracefully to use SHA256. So
-    # let us check the signature using both SHA1 and SHA256 and if one
-    # of them passes then we will be satisfied. Eventually this can
-    # be simplified and we'll only check with SHA256.
     if digestAlg is None:
-        # old SHA1 algorithm.
+        # First, try verifying with SHA1
         sigVerifyPassed = verify(msg, sig, hexPubkey, "sha1")
         if sigVerifyPassed:
-            # The signature check passed using SHA1
             return True
-        # The signature check using SHA1 failed. Let us try it with SHA256.
+        # If SHA1 verification fails, try SHA256
         return verify(msg, sig, hexPubkey, "sha256")
 
+    # Load the public key using the new makePubCryptor function
+    public_key = makePubCryptor(hexPubkey)
+
+    # Choose the appropriate digest algorithm
+    digest_algorithm = _choose_digest_alg(digestAlg)
+
     try:
-        return makePubCryptor(hexPubkey).verify(
-            sig, msg, digest_alg=_choose_digest_alg(digestAlg))
-    except:
+        # Verify the signature
+        public_key.verify(
+            sig,
+            msg.encode('utf-8'),  # Convert message to bytes
+            ec.ECDSA(digest_algorithm)
+        )
+        return True
+    except Exception:
         return False
+
