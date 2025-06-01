@@ -14,7 +14,6 @@ import addresses
 import l10n
 import protocol
 import state
-from . import connectionpool
 from bmconfigparser import config
 from highlevelcrypto import randomBytes
 from network import dandelion_ins, invQueue, receiveDataQueue
@@ -253,6 +252,7 @@ class TCPConnection(BMProto, TLSDispatcher):
         sendChunk()
 
     def handle_connect(self):
+        import connectionpool
         """Callback for TCP connection being established."""
         try:
             AdvancedDispatcher.handle_connect(self)
@@ -309,6 +309,7 @@ class Socks5BMConnection(Socks5Connection, TCPConnection):
         self.set_state("init")
 
     def state_proxy_handshake_done(self):
+        import connectionpool
         """
         State when SOCKS5 connection succeeds, we need to send a
         Bitmessage handshake to peer.
@@ -422,6 +423,7 @@ class TCPServer(AdvancedDispatcher):
             return False
 
     def handle_accept(self):
+        import connectionpool
         """Incoming connection callback"""
         try:
             sock = self.accept()[0]

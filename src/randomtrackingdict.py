@@ -5,9 +5,9 @@ from threading import RLock
 from time import time
 
 try:
-    from . import helper_random
+    import helper_random
 except ImportError:
-    from . import helper_random
+    import helper_random
 
 
 class RandomTrackingDict(object):

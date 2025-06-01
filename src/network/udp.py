@@ -8,12 +8,11 @@ import time
 # magic imports!
 import protocol
 import state
-from . import connectionpool
 
 from network import receiveDataQueue
-from .bmproto import BMProto
-from .node import Peer
-from .objectracker import ObjectTracker
+from bmproto import BMProto
+from node import Peer
+from objectracker import ObjectTracker
 
 
 logger = logging.getLogger('default')
@@ -74,6 +73,8 @@ class UDPSocket(BMProto):  # pylint: disable=too-many-instance-attributes
         return True
 
     def bm_command_addr(self):
+        import connectionpool
+
         addresses = self._decode_addr()
         # only allow peer discovery from private IPs in order to avoid
         # attacks from random IPs on the internet

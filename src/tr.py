@@ -4,9 +4,9 @@ Translating text
 import os
 
 try:
-    from . import state
+    import state
 except ImportError:
-    from . import state
+    import state
 
 
 class translateClass:

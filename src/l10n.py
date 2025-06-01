@@ -8,7 +8,7 @@ import time
 import six
 from six.moves import range
 
-from .bmconfigparser import config
+from bmconfigparser import config
 
 logger = logging.getLogger('default')
 

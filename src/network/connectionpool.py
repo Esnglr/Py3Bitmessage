@@ -20,7 +20,7 @@ from bmconfigparser import config
 from connectionchooser import chooseConnection
 from node import Peer
 from proxy import Proxy
-from tcp import (
+from network.tcp import (
     bootstrap, Socks4aBMConnection, Socks5BMConnection,
     TCPConnection, TCPServer)
 from udp import UDPSocket
