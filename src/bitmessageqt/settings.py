@@ -1,7 +1,7 @@
 """
 This module setting file is for settings
 """
-import ConfigParser
+import configparser
 import os
 import sys
 import tempfile
@@ -16,7 +16,7 @@ import openclpow
 import paths
 import queues
 import state
-import widgets
+from . import widgets
 from bmconfigparser import config as config_obj
 from helper_sql import sqlExecute, sqlStoredProcedure
 from helper_startup import start_proxyconfig
@@ -29,9 +29,9 @@ from tr import _translate
 def getSOCKSProxyType(config):
     """Get user socksproxytype setting from *config*"""
     try:
-        result = ConfigParser.SafeConfigParser.get(
+        result = configparser.SafeConfigParser.get(
             config, 'bitmessagesettings', 'socksproxytype')
-    except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+    except (configparser.NoSectionError, configparser.NoOptionError):
         return None
     else:
         if result.lower() in ('', 'none', 'false'):

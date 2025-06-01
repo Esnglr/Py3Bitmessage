@@ -321,7 +321,7 @@ def epoll_poller(timeout=0.0, map=None):
     except AttributeError:
         epoll_poller.pollster = select.epoll()
     if map:
-        for fd, obj in map.items():
+        for fd, obj in list(map.items()):
             flags = newflags = 0
             if obj.readable():
                 flags |= select.POLLIN | select.POLLPRI
@@ -379,7 +379,7 @@ def kqueue_poller(timeout=0.0, map=None):
     if map:
         updates = []
         selectables = 0
-        for fd, obj in map.items():
+        for fd, obj in list(map.items()):
             kq_filter = 0
             if obj.readable():
                 kq_filter |= 1
@@ -749,7 +749,7 @@ class dispatcher(object):
     def log_info(self, message, log_type='info'):
         """Conditionally print a message"""
         if log_type not in self.ignore_log_types:
-            print('%s: %s' % (log_type, message))
+            print(('%s: %s' % (log_type, message)))
 
     def handle_read_event(self):
         """Handle a read event"""

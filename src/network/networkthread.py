@@ -2,9 +2,9 @@
 A thread to handle network concerns
 """
 import network.asyncore_pollchoose as asyncore
-import connectionpool
+from . import connectionpool
 from queues import excQueue
-from threads import StoppableThread
+from .threads import StoppableThread
 
 
 class BMNetworkThread(StoppableThread):
@@ -21,17 +21,17 @@ class BMNetworkThread(StoppableThread):
 
     def stopThread(self):
         super(BMNetworkThread, self).stopThread()
-        for i in connectionpool.pool.listeningSockets.values():
+        for i in list(connectionpool.pool.listeningSockets.values()):
             try:
                 i.close()
             except:  # nosec B110 # pylint:disable=bare-except
                 pass
-        for i in connectionpool.pool.outboundConnections.values():
+        for i in list(connectionpool.pool.outboundConnections.values()):
             try:
                 i.close()
             except:  # nosec B110 # pylint:disable=bare-except
                 pass
-        for i in connectionpool.pool.inboundConnections.values():
+        for i in list(connectionpool.pool.inboundConnections.values()):
             try:
                 i.close()
             except:  # nosec B110 # pylint:disable=bare-except

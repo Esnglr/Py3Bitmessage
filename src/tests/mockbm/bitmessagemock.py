@@ -4,10 +4,10 @@
 Bitmessage mock
 """
 
-from pybitmessage.class_addressGenerator import addressGenerator
-from pybitmessage.inventory import Inventory
-from pybitmessage.mpybit import NavigateApp
-from pybitmessage import state
+from .pybitmessage.class_addressGenerator import addressGenerator
+from .pybitmessage.inventory import Inventory
+from .pybitmessage.mpybit import NavigateApp
+from .pybitmessage import state
 
 
 class MockMain(object):  # pylint: disable=too-few-public-methods

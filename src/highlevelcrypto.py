@@ -12,10 +12,10 @@ import os
 from binascii import hexlify
 
 try:
-    import pyelliptic
-    from fallback import RIPEMD160Hash
-    from pyelliptic import OpenSSL
-    from pyelliptic import arithmetic as a
+    from . import pyelliptic
+    from .fallback import RIPEMD160Hash
+    from .pyelliptic import OpenSSL
+    from .pyelliptic import arithmetic as a
 except ImportError:
     from pybitmessage import pyelliptic
     from pybitmessage.fallback import RIPEMD160Hash

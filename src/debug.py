@@ -42,8 +42,8 @@ import sys
 
 from six.moves import configparser
 
-import helper_startup
-import state
+from . import helper_startup
+from . import state
 
 helper_startup.loadConfig()
 
@@ -90,7 +90,7 @@ def configureLogging():
         'version': 1,
         'formatters': {
             'default': {
-                'format': u'%(asctime)s - %(levelname)s - %(message)s',
+                'format': '%(asctime)s - %(levelname)s - %(message)s',
             },
         },
         'handlers': {

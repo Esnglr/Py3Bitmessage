@@ -9,18 +9,18 @@ import sys
 import time
 import random
 
-import asyncore_pollchoose as asyncore
-import knownnodes
+from . import asyncore_pollchoose as asyncore
+from . import knownnodes
 import protocol
 import state
 from bmconfigparser import config
-from connectionchooser import chooseConnection
-from node import Peer
-from proxy import Proxy
-from tcp import (
+from .connectionchooser import chooseConnection
+from .node import Peer
+from .proxy import Proxy
+from .tcp import (
     bootstrap, Socks4aBMConnection, Socks5BMConnection,
     TCPConnection, TCPServer)
-from udp import UDPSocket
+from .udp import UDPSocket
 
 logger = logging.getLogger('default')
 
@@ -77,7 +77,7 @@ class BMConnectionPool(object):
         Shortcut for combined list of connections from
         `inboundConnections` and `outboundConnections` dicts
         """
-        return self.inboundConnections.values() + self.outboundConnections.values()
+        return list(self.inboundConnections.values()) + list(self.outboundConnections.values())
 
     def establishedConnections(self):
         """Shortcut for list of connections having fullyEstablished == True"""
@@ -279,7 +279,7 @@ class BMConnectionPool(object):
                 except ValueError:
                     Proxy.onion_proxy = None
             established = sum(
-                1 for c in self.outboundConnections.values()
+                1 for c in list(self.outboundConnections.values())
                 if (c.connected and c.fullyEstablished))
             pending = len(self.outboundConnections) - established
             if established < config.safeGetInt(
@@ -303,7 +303,7 @@ class BMConnectionPool(object):
                     host_network_group = protocol.network_group(
                         chosen.host)
                     same_group = False
-                    for j in self.outboundConnections.values():
+                    for j in list(self.outboundConnections.values()):
                         if host_network_group == j.network_group:
                             same_group = True
                             if chosen.host == j.destination.host:
@@ -330,7 +330,7 @@ class BMConnectionPool(object):
 
                     self._lastSpawned = time.time()
         else:
-            for i in self.outboundConnections.values():
+            for i in list(self.outboundConnections.values()):
                 # FIXME: rating will be increased after next connection
                 i.handle_close()
 
@@ -358,12 +358,12 @@ class BMConnectionPool(object):
                 logger.info('Starting UDP socket(s).')
         else:
             if self.listeningSockets:
-                for i in self.listeningSockets.values():
+                for i in list(self.listeningSockets.values()):
                     i.close_reason = "Stopping listening"
                     i.accepting = i.connecting = i.connected = False
                 logger.info('Stopped listening for incoming connections.')
             if self.udpSockets:
-                for i in self.udpSockets.values():
+                for i in list(self.udpSockets.values()):
                     i.close_reason = "Stopping UDP socket"
                     i.accepting = i.connecting = i.connected = False
                 logger.info('Stopped udp sockets.')
@@ -387,7 +387,7 @@ class BMConnectionPool(object):
                     i.set_state("close")
         for i in (
             self.connections()
-            + self.listeningSockets.values() + self.udpSockets.values()
+            + list(self.listeningSockets.values()) + list(self.udpSockets.values())
         ):
             if not (i.accepting or i.connecting or i.connected):
                 reaper.append(i)

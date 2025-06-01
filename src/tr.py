@@ -4,7 +4,7 @@ Translating text
 import os
 
 try:
-    import state
+    from . import state
 except ImportError:
     from . import state
 
@@ -48,7 +48,7 @@ def translateText(context, text, n=None):
                   ' You can download PyQt from http://www.riverbankcomputing.com/software/pyqt/download'
                   ' or by searching Google for \'PyQt Download\'.'
                   ' If you want to run in daemon mode, see https://bitmessage.org/wiki/Daemon')
-            print('Error message:', err)
+            print(('Error message:', err))
             os._exit(0)  # pylint: disable=protected-access
         if n is None:
             return QtGui.QApplication.translate(context, text)

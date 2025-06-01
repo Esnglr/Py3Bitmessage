@@ -1,8 +1,0 @@
-bin
-build
-dist
-__pycache__
-.buildozer
-.tox
-mprofile_*
-**.so

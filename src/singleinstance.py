@@ -8,7 +8,7 @@ import atexit
 import os
 import sys
 
-import state
+from . import state
 
 try:
     import fcntl  # @UnresolvedImport
@@ -31,7 +31,7 @@ class singleinstance(object):
 
         if state.enableGUI and not self.daemon and not state.curses:
             # Tells the already running (if any) application to get focus.
-            import bitmessageqt
+            from . import bitmessageqt
             bitmessageqt.init()
 
         self.lock()

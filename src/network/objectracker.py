@@ -4,7 +4,7 @@ Module for tracking objects
 import time
 from threading import RLock
 
-import connectionpool
+from . import connectionpool
 from network import dandelion_ins
 from randomtrackingdict import RandomTrackingDict
 
@@ -75,7 +75,7 @@ class ObjectTracker(object):
                 with self.objectsNewToThemLock:
                     self.objectsNewToThem = {
                         k: v
-                        for k, v in self.objectsNewToThem.iteritems()
+                        for k, v in self.objectsNewToThem.items()
                         if v >= deadline}
             self.lastCleaned = time.time()
 

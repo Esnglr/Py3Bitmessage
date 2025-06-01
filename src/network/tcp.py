@@ -14,22 +14,22 @@ import addresses
 import l10n
 import protocol
 import state
-import connectionpool
+from . import connectionpool
 from bmconfigparser import config
 from highlevelcrypto import randomBytes
 from network import dandelion_ins, invQueue, receiveDataQueue
 from queues import UISignalQueue
 from tr import _translate
 
-import asyncore_pollchoose as asyncore
-import knownnodes
+from . import asyncore_pollchoose as asyncore
+from . import knownnodes
 from network.advanceddispatcher import AdvancedDispatcher
 from network.bmproto import BMProto
 from network.objectracker import ObjectTracker
 from network.socks4a import Socks4aConnection
 from network.socks5 import Socks5Connection
 from network.tls import TLSDispatcher
-from node import Peer
+from .node import Peer
 
 
 logger = logging.getLogger('default')
@@ -191,7 +191,7 @@ class TCPConnection(BMProto, TLSDispatcher):
                     # only if more recent than 3 hours
                     # and having positive or neutral rating
                     filtered = [
-                        (k, v) for k, v in nodes.iteritems()
+                        (k, v) for k, v in nodes.items()
                         if v["lastseen"] > int(time.time())
                         - maximumAgeOfNodesThatIAdvertiseToOthers
                         and v["rating"] >= 0 and not k.host.endswith('.onion')
@@ -237,7 +237,7 @@ class TCPConnection(BMProto, TLSDispatcher):
         payload = b''
         # Now let us start appending all of these hashes together.
         # They will be sent out in a big inv message to our new peer.
-        for obj_hash, _ in bigInvList.items():
+        for obj_hash, _ in list(bigInvList.items()):
             payload += obj_hash
             objectCount += 1
 

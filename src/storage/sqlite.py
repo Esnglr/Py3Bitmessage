@@ -61,7 +61,7 @@ class SqliteInventory(InventoryStorage):
 
     def __iter__(self):
         with self.lock:
-            hashes = self._inventory.keys()[:]
+            hashes = list(self._inventory.keys())[:]
             hashes += (x for x, in sqlQuery('SELECT hash FROM inventory'))
             return hashes.__iter__()
 
@@ -83,7 +83,7 @@ class SqliteInventory(InventoryStorage):
             query.append(sqlite3.Binary(tag))
         with self.lock:
             values = [
-                value for value in self._inventory.values()
+                value for value in list(self._inventory.values())
                 if value.type == objectType
                 and tag is None or value.tag == tag
             ] + [InventoryItem(*value) for value in sqlQuery(*query)]
@@ -93,7 +93,7 @@ class SqliteInventory(InventoryStorage):
         """Return unexpired inventory vectors filtered by stream"""
         with self.lock:
             t = int(time.time())
-            hashes = [x for x, value in self._inventory.items()
+            hashes = [x for x, value in list(self._inventory.items())
                       if value.stream == stream and value.expires > t]
             hashes += (str(payload) for payload, in sqlQuery(
                 'SELECT hash FROM inventory WHERE streamnumber=?'
@@ -106,7 +106,7 @@ class SqliteInventory(InventoryStorage):
             # If you use both the inventoryLock and the sqlLock,
             # always use the inventoryLock OUTSIDE of the sqlLock.
             with SqlBulkExecute() as sql:
-                for objectHash, value in self._inventory.items():
+                for objectHash, value in list(self._inventory.items()):
                     sql.execute(
                         'INSERT INTO inventory VALUES (?, ?, ?, ?, ?, ?)',
                         sqlite3.Binary(objectHash), *value)
@@ -119,5 +119,5 @@ class SqliteInventory(InventoryStorage):
                 'DELETE FROM inventory WHERE expirestime<?',
                 int(time.time()) - (60 * 60 * 3))
             self._objects.clear()
-            for objectHash, value in self._inventory.items():
+            for objectHash, value in list(self._inventory.items()):
                 self._objects[objectHash] = value.stream

@@ -23,12 +23,12 @@ import gc
 import os
 import time
 
-import queues
-import state
-from bmconfigparser import config
-from helper_sql import sqlExecute, sqlQuery
-from network import connectionpool, knownnodes, StoppableThread
-from tr import _translate
+from . import queues
+from . import state
+from .bmconfigparser import config
+from .helper_sql import sqlExecute, sqlQuery
+from .network import connectionpool, knownnodes, StoppableThread
+from .tr import _translate
 
 
 #: Equals 4 weeks. You could make this longer if you want
@@ -134,7 +134,7 @@ class singleCleaner(StoppableThread):
 
             # discovery tracking
             exp = time.time() - singleCleaner.expireDiscoveredPeers
-            reaper = (k for k, v in state.discoveredPeers.items() if v < exp)
+            reaper = (k for k, v in list(state.discoveredPeers.items()) if v < exp)
             for k in reaper:
                 try:
                     del state.discoveredPeers[k]

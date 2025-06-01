@@ -54,8 +54,8 @@ def json_serialize_knownnodes(output):
     Reorganize knownnodes dict and write it as JSON to output
     """
     _serialized = []
-    for stream, peers in knownNodes.iteritems():
-        for peer, info in peers.iteritems():
+    for stream, peers in knownNodes.items():
+        for peer, info in peers.items():
             info.update(rating=round(info.get('rating', 0), 2))
             _serialized.append({
                 'stream': stream, 'peer': peer._asdict(), 'info': info
@@ -86,8 +86,8 @@ def pickle_deserialize_old_knownnodes(source):
     """
     global knownNodes
     knownNodes = pickle.load(source)  # nosec B301
-    for stream in knownNodes.keys():
-        for node, params in knownNodes[stream].iteritems():
+    for stream in list(knownNodes.keys()):
+        for node, params in knownNodes[stream].items():
             if isinstance(params, (float, int)):
                 addKnownNode(stream, node, params)
 
@@ -180,7 +180,7 @@ def increaseRating(peer):
     increaseAmount = 0.1
     maxRating = 1
     with knownNodesLock:
-        for stream in knownNodes.keys():
+        for stream in list(knownNodes.keys()):
             try:
                 knownNodes[stream][peer]["rating"] = min(
                     knownNodes[stream][peer]["rating"] + increaseAmount,
@@ -195,7 +195,7 @@ def decreaseRating(peer):
     decreaseAmount = 0.1
     minRating = -1
     with knownNodesLock:
-        for stream in knownNodes.keys():
+        for stream in list(knownNodes.keys()):
             try:
                 knownNodes[stream][peer]["rating"] = max(
                     knownNodes[stream][peer]["rating"] - decreaseAmount,
@@ -238,7 +238,7 @@ def cleanupKnownNodes(pool):
         for stream in knownNodes:
             if stream not in pool.streams:
                 continue
-            keys = knownNodes[stream].keys()
+            keys = list(knownNodes[stream].keys())
             for node in keys:
                 if len(knownNodes[stream]) <= 1:  # leave at least one node
                     if stream == 1:

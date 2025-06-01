@@ -15,17 +15,17 @@ from struct import pack
 from six.moves import configparser
 
 try:
-    import defaults
-    import helper_random
-    import paths
-    import state
-    from bmconfigparser import config, config_ready
+    from . import defaults
+    from . import helper_random
+    from . import paths
+    from . import state
+    from .bmconfigparser import config, config_ready
 except ImportError:
     from . import defaults, helper_random, paths, state
     from .bmconfigparser import config, config_ready
 
 try:
-    from plugins.plugin import get_plugin
+    from .plugins.plugin import get_plugin
 except ImportError:
     get_plugin = None
 

@@ -2,10 +2,10 @@
 
 import inspect
 import re
-from HTMLParser import HTMLParser
+from html.parser import HTMLParser
 
-from urllib import quote_plus
-from urlparse import urlparse
+from urllib.parse import quote_plus
+from urllib.parse import urlparse
 
 
 class SafeHTMLParser(HTMLParser):
@@ -71,8 +71,8 @@ class SafeHTMLParser(HTMLParser):
     def reset_safe(self):
         """Reset runtime variables specific to this class"""
         self.elements = set()
-        self.raw = u""
-        self.sanitised = u""
+        self.raw = ""
+        self.sanitised = ""
         self.has_html = False
         self.allow_picture = False
         self.allow_external_src = False
@@ -124,9 +124,9 @@ class SafeHTMLParser(HTMLParser):
 
     def feed(self, data):
         try:
-            data = unicode(data, 'utf-8')
+            data = str(data, 'utf-8')
         except UnicodeDecodeError:
-            data = unicode(data, 'utf-8', errors='replace')
+            data = str(data, 'utf-8', errors='replace')
         HTMLParser.feed(self, data)
         tmp = SafeHTMLParser.replace_pre(data)
         tmp = self.uriregex1.sub(r'<a href="\1">\1</a>', tmp)

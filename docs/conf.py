@@ -18,12 +18,12 @@ import version  # noqa:E402
 
 # -- Project information -----------------------------------------------------
 
-project = u'PyBitmessage'
-copyright = u'2019-2022, The Bitmessage Team'  # pylint: disable=redefined-builtin
-author = u'The Bitmessage Team'
+project = 'PyBitmessage'
+copyright = '2019-2022, The Bitmessage Team'  # pylint: disable=redefined-builtin
+author = 'The Bitmessage Team'
 
 # The short X.Y version
-version = unicode(version.softwareVersion)
+version = str(version.softwareVersion)
 
 # The full version, including alpha/beta/rc tags
 release = version
@@ -148,8 +148,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'PyBitmessage.tex', u'PyBitmessage Documentation',
-     u'The Bitmessage Team', 'manual'),
+    (master_doc, 'PyBitmessage.tex', 'PyBitmessage Documentation',
+     'The Bitmessage Team', 'manual'),
 ]
 
 
@@ -158,7 +158,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pybitmessage', u'PyBitmessage Documentation',
+    (master_doc, 'pybitmessage', 'PyBitmessage Documentation',
      [author], 1)
 ]
 
@@ -169,7 +169,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'PyBitmessage', u'PyBitmessage Documentation',
+    (master_doc, 'PyBitmessage', 'PyBitmessage Documentation',
      author, 'PyBitmessage', 'One line description of project.',
      'Miscellaneous'),
 ]

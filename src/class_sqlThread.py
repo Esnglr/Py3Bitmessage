@@ -12,15 +12,15 @@ import time
 from six.moves.reprlib import repr
 
 try:
-    import helper_sql
-    import helper_startup
-    import paths
-    import queues
-    import state
-    from addresses import encodeAddress
-    from bmconfigparser import config, config_ready
-    from debug import logger
-    from tr import _translate
+    from . import helper_sql
+    from . import helper_startup
+    from . import paths
+    from . import queues
+    from . import state
+    from .addresses import encodeAddress
+    from .bmconfigparser import config, config_ready
+    from .debug import logger
+    from .tr import _translate
 except ImportError:
     from . import helper_sql, helper_startup, paths, queues, state
     from .addresses import encodeAddress

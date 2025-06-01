@@ -3,9 +3,9 @@ Network statistics
 """
 import time
 
-import asyncore_pollchoose as asyncore
-import connectionpool
-from objectracker import missingObjects
+from . import asyncore_pollchoose as asyncore
+from . import connectionpool
+from .objectracker import missingObjects
 
 
 lastReceivedTimestamp = time.time()

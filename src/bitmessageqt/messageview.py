@@ -7,7 +7,7 @@ zoom and URL click warning popup
 
 from PyQt4 import QtCore, QtGui
 
-from safehtmlparser import SafeHTMLParser
+from .safehtmlparser import SafeHTMLParser
 from tr import _translate
 
 
@@ -91,7 +91,7 @@ class MessageView(QtGui.QTextBrowser):
             QtGui.QApplication.translate(
                 "MessageView",
                 "The link \"%1\" will open in a browser. It may be a security risk, it could de-anonymise you"
-                " or download malicious data. Are you sure?").arg(unicode(link.toString())),
+                " or download malicious data. Are you sure?").arg(str(link.toString())),
             QtGui.QMessageBox.Yes,
             QtGui.QMessageBox.No)
         if reply == QtGui.QMessageBox.Yes:
@@ -133,7 +133,7 @@ class MessageView(QtGui.QTextBrowser):
         self.mode = MessageView.MODE_PLAIN
         out = self.html.raw
         if self.html.has_html:
-            out = "<div align=\"center\" style=\"text-decoration: underline;\"><b>" + unicode(
+            out = "<div align=\"center\" style=\"text-decoration: underline;\"><b>" + str(
                 QtGui.QApplication.translate(
                     "MessageView", "HTML detected, click here to display")) + "</b></div><br/>" + out
         self.out = out
@@ -145,7 +145,7 @@ class MessageView(QtGui.QTextBrowser):
         """Render message as HTML"""
         self.mode = MessageView.MODE_HTML
         out = self.html.sanitised
-        out = "<div align=\"center\" style=\"text-decoration: underline;\"><b>" + unicode(
+        out = "<div align=\"center\" style=\"text-decoration: underline;\"><b>" + str(
             QtGui.QApplication.translate("MessageView", "Click here to disable HTML")) + "</b></div><br/>" + out
         self.out = out
         self.outpos = 0

@@ -6,13 +6,13 @@ src/bitmessageqt/newchandialog.py
 
 from PyQt4 import QtCore, QtGui
 
-import widgets
+from . import widgets
 from addresses import addBMIfNotPresent
-from addressvalidator import AddressValidator, PassPhraseValidator
+from .addressvalidator import AddressValidator, PassPhraseValidator
 from queues import (
     addressGeneratorQueue, apiAddressGeneratorReturnQueue, UISignalQueue)
 from tr import _translate
-from utils import str_chan
+from .utils import str_chan
 
 
 class NewChanDialog(QtGui.QDialog):
@@ -66,7 +66,7 @@ class NewChanDialog(QtGui.QDialog):
         addressGeneratorReturnValue = apiAddressGeneratorReturnQueue.get(True)
         if addressGeneratorReturnValue and addressGeneratorReturnValue[0] != 'chan name does not match address':
             UISignalQueue.put(('updateStatusBar', _translate(
-                "newchandialog", "Successfully created / joined chan %1").arg(unicode(self.chanPassPhrase.text()))))
+                "newchandialog", "Successfully created / joined chan %1").arg(str(self.chanPassPhrase.text()))))
             self.parent.ui.tabWidget.setCurrentIndex(
                 self.parent.ui.tabWidget.indexOf(self.parent.ui.chans)
             )

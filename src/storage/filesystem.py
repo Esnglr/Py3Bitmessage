@@ -39,7 +39,7 @@ class FilesystemInventory(InventoryStorage):
         self._load()
 
     def __contains__(self, hashval):
-        for streamDict in self._inventory.values():
+        for streamDict in list(self._inventory.values()):
             if hashval in streamDict:
                 return True
         return False
@@ -48,7 +48,7 @@ class FilesystemInventory(InventoryStorage):
         raise NotImplementedError
 
     def __getitem__(self, hashval):
-        for streamDict in self._inventory.values():
+        for streamDict in list(self._inventory.values()):
             try:
                 retval = streamDict[hashval]
             except KeyError:
@@ -142,13 +142,13 @@ class FilesystemInventory(InventoryStorage):
 
     def __iter__(self):
         elems = []
-        for streamDict in self._inventory.values():
-            elems.extend(streamDict.keys())
+        for streamDict in list(self._inventory.values()):
+            elems.extend(list(streamDict.keys()))
         return elems.__iter__()
 
     def __len__(self):
         retval = 0
-        for streamDict in self._inventory.values():
+        for streamDict in list(self._inventory.values()):
             retval += len(streamDict)
         return retval
 
@@ -172,7 +172,7 @@ class FilesystemInventory(InventoryStorage):
 
     def stream_list(self):
         """Return list of streams"""
-        return self._inventory.keys()
+        return list(self._inventory.keys())
 
     def object_list(self):
         """Return inventory vectors (hashes) from a directory"""
@@ -220,7 +220,7 @@ class FilesystemInventory(InventoryStorage):
     def by_type_and_tag(self, objectType, tag):
         """Get a list of objects filtered by object type and tag"""
         retval = []
-        for streamDict in self._inventory.values():
+        for streamDict in list(self._inventory.values()):
             for hashId, item in streamDict:
                 if item.type == objectType and item.tag == tag:
                     try:
@@ -239,7 +239,7 @@ class FilesystemInventory(InventoryStorage):
     def hashes_by_stream(self, stream):
         """Return inventory vectors (hashes) for a stream"""
         try:
-            return self._inventory[stream].keys()
+            return list(self._inventory[stream].keys())
         except KeyError:
             return []
 
@@ -247,7 +247,7 @@ class FilesystemInventory(InventoryStorage):
         """Return unexpired hashes in the inventory for a particular stream"""
         try:
             return [
-                x for x, value in self._inventory[stream].items()
+                x for x, value in list(self._inventory[stream].items())
                 if value.expires > int(time.time())]
         except KeyError:
             return []
@@ -260,8 +260,8 @@ class FilesystemInventory(InventoryStorage):
         """Clean out old items from the inventory"""
         minTime = int(time.time()) - 60 * 60 * 30
         deletes = []
-        for streamDict in self._inventory.values():
-            for hashId, item in streamDict.items():
+        for streamDict in list(self._inventory.values()):
+            for hashId, item in list(streamDict.items()):
                 if item.expires < minTime:
                     deletes.append(hashId)
         for hashId in deletes:

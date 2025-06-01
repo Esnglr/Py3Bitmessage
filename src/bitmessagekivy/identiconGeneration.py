@@ -42,7 +42,7 @@ def generate_hash(string):
         string = str.lower(string)
         hash_object = hashlib.md5(  # nosec B324, B303
             str.encode(string))
-        print(hash_object.hexdigest())
+        print((hash_object.hexdigest()))
         # returned object is a hex string
         return hash_object.hexdigest()
     except IndexError:

@@ -15,13 +15,13 @@ from six.moves import http_client as httplib
 from six.moves.urllib.parse import urlparse
 from six.moves.urllib.request import urlopen
 
-import queues
-import state
-import tr
-from bmconfigparser import config
-from debug import logger
-from network import StoppableThread, connectionpool, knownnodes
-from network.node import Peer
+from . import queues
+from . import state
+from . import tr
+from .bmconfigparser import config
+from .debug import logger
+from .network import StoppableThread, connectionpool, knownnodes
+from .network.node import Peer
 
 
 def createRequestXML(service, action, arguments=None):
@@ -232,7 +232,7 @@ class uPnPThread(StoppableThread):
         # wait until asyncore binds so that we know the listening port
         bound = False
         while state.shutdown == 0 and not self._stopped and not bound:
-            for s in connectionpool.pool.listeningSockets.values():
+            for s in list(connectionpool.pool.listeningSockets.values()):
                 if s.is_bound():
                     bound = True
             if not bound:

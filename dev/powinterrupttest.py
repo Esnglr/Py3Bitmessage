@@ -11,7 +11,7 @@ shutdown = 0
 
 def signal_handler(signal, frame):
     global shutdown
-    print("Got signal %i in %s/%s" % (signal, current_process().name, current_thread().name))
+    print(("Got signal %i in %s/%s" % (signal, current_process().name, current_thread().name)))
     if current_process().name != "MainProcess":
         raise StopIteration("Interrupted")
     if current_thread().name != "PyBitmessage":
@@ -27,7 +27,7 @@ def _doCPoW(target, initialHash):
     out_m = ctypes.c_ulonglong(m)
     print("C PoW start")
     for c in range(0, 200000):
-        print("Iter: %i" % (c))
+        print(("Iter: %i" % (c)))
         nonce = bmpow(out_h, out_m)
         if shutdown:
             break

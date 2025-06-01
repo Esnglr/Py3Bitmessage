@@ -5,9 +5,9 @@ import logging
 import os
 from struct import pack
 
-import paths
-from bmconfigparser import config
-from state import shutdown
+from . import paths
+from .bmconfigparser import config
+from .state import shutdown
 
 try:
     import numpy

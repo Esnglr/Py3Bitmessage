@@ -13,16 +13,16 @@ import time
 from binascii import hexlify
 from struct import Struct, pack, unpack
 
-import defaults
-import highlevelcrypto
-import state
-from addresses import (decodeAddress, decodeVarint, encodeVarint,
+from . import defaults
+from . import highlevelcrypto
+from . import state
+from .addresses import (decodeAddress, decodeVarint, encodeVarint,
                        varintDecodeError)
-from bmconfigparser import config
-from debug import logger
-from helper_sql import sqlExecute
-from network.node import Peer
-from version import softwareVersion
+from .bmconfigparser import config
+from .debug import logger
+from .helper_sql import sqlExecute
+from .network.node import Peer
+from .version import softwareVersion
 
 # Network constants
 magic = 0xE9BEB4D9

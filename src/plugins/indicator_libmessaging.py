@@ -23,9 +23,9 @@ class IndicatorLibmessaging(object):
             return
 
         self._menu = {
-            'send': unicode(_translate('MainWindow', 'Send')),
-            'messages': unicode(_translate('MainWindow', 'Messages')),
-            'subscriptions': unicode(_translate('MainWindow', 'Subscriptions'))
+            'send': str(_translate('MainWindow', 'Send')),
+            'messages': str(_translate('MainWindow', 'Messages')),
+            'subscriptions': str(_translate('MainWindow', 'Subscriptions'))
         }
 
         self.new_message_item = self.new_broadcast_item = None

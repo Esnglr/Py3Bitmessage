@@ -5,7 +5,7 @@ from threading import RLock
 from time import time
 
 try:
-    import helper_random
+    from . import helper_random
 except ImportError:
     from . import helper_random
 
@@ -121,7 +121,7 @@ class RandomTrackingDict(object):
             if count > available:
                 count = available
             randomIndex = helper_random.randomsample(
-                range(self.len - self.pendingLen), count)
+                list(range(self.len - self.pendingLen)), count)
             retval = [self.indexDict[i] for i in randomIndex]
 
             for i in sorted(randomIndex, reverse=True):

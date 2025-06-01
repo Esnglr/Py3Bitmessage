@@ -88,7 +88,7 @@ if __name__ == "__main__":
         while True:
             print("Waiting for connection")
             sock, addr = serversock.accept()
-            print("Got connection from %s:%i" % (addr[0], addr[1]))
+            print(("Got connection from %s:%i" % (addr[0], addr[1])))
             sslSock = sslHandshake(sock, True)
             if sslSock:
                 sslSock.shutdown(socket.SHUT_RDWR)

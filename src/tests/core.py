@@ -6,7 +6,7 @@ Tests for core and those that do not work outside
 import atexit
 import os
 import pickle  # nosec
-import Queue
+import queue
 import random  # nosec
 import shutil
 import socket
@@ -32,7 +32,7 @@ from network.tcp import Socks4aBMConnection, Socks5BMConnection, TCPConnection
 from queues import excQueue
 from version import softwareVersion
 
-from common import cleanup
+from .common import cleanup
 
 try:
     socket.socket().bind(('127.0.0.1', 9050))
@@ -116,7 +116,7 @@ class TestCore(unittest.TestCase):
             for peer in (Peer("127.0.0.1", 8448),):
                 direct = TCPConnection(peer)
                 while asyncore.socket_map:
-                    print("loop, state = %s" % direct.state)
+                    print(("loop, state = %s" % direct.state))
                     asyncore.loop(timeout=10, count=1)
         except:  # noqa:E722
             self.fail('Exception in test loop')
@@ -137,8 +137,8 @@ class TestCore(unittest.TestCase):
     @staticmethod
     def _outdate_knownnodes():
         with knownnodes.knownNodesLock:
-            for nodes in knownnodes.knownNodes.itervalues():
-                for node in nodes.itervalues():
+            for nodes in list(knownnodes.knownNodes.values()):
+                for node in list(nodes.values()):
                     node['lastseen'] -= 2419205  # older than 28 days
 
     def test_knownnodes_pickle(self):
@@ -146,9 +146,9 @@ class TestCore(unittest.TestCase):
         pickle_knownnodes()
         self._wipe_knownnodes()
         knownnodes.readKnownNodes()
-        for nodes in knownnodes.knownNodes.itervalues():
+        for nodes in list(knownnodes.knownNodes.values()):
             self_count = n = 0
-            for n, node in enumerate(nodes.itervalues()):
+            for n, node in enumerate(nodes.values()):
                 if node.get('self'):
                     self_count += 1
             self.assertEqual(n - self_count, 2)
@@ -170,7 +170,7 @@ class TestCore(unittest.TestCase):
         while True:
             try:
                 thread, exc = excQueue.get(block=False)
-            except Queue.Empty:
+            except queue.Empty:
                 return
             if thread == 'Asyncore' and isinstance(exc, IndexError):
                 self.fail("IndexError because of empty knownNodes!")
@@ -202,7 +202,7 @@ class TestCore(unittest.TestCase):
         while c > 0:
             time.sleep(1)
             c -= 2
-            for peer, con in connectionpool.pool.outboundConnections.iteritems():
+            for peer, con in list(connectionpool.pool.outboundConnections.items()):
                 if (
                     peer.host.startswith('bootstrap')
                     or peer.host == 'quzwelsuziwqgpt2.onion'
@@ -223,7 +223,7 @@ class TestCore(unittest.TestCase):
             'Failed to connect during %.2f sec' % (time.time() - _started))
 
     def _check_knownnodes(self):
-        for stream in knownnodes.knownNodes.itervalues():
+        for stream in list(knownnodes.knownNodes.values()):
             for peer in stream:
                 if peer.host.startswith('bootstrap'):
                     self.fail(

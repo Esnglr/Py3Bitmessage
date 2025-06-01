@@ -9,10 +9,10 @@ from email.header import Header
 from six.moves import email_mime_text
 from six.moves.urllib import parse as urlparse
 
-import queues
-import state
-from bmconfigparser import config
-from network.threads import StoppableThread
+from . import queues
+from . import state
+from .bmconfigparser import config
+from .network.threads import StoppableThread
 
 SMTPDOMAIN = "bmaddr.lan"
 
@@ -59,11 +59,7 @@ class smtpDeliver(StoppableThread):
                     msg = email_mime_text(body, 'plain', 'utf-8')
                     msg['Subject'] = Header(subject, 'utf-8')
                     msg['From'] = fromAddress + '@' + SMTPDOMAIN
-                    toLabel = map(
-                        lambda y: config.safeGet(y, "label"),
-                        filter(
-                            lambda x: x == toAddress, config.addresses())
-                    )
+                    toLabel = [config.safeGet(y, "label") for y in [x for x in config.addresses() if x == toAddress]]
                     if toLabel:
                         msg['To'] = "\"%s\" <%s>" % (Header(toLabel[0], 'utf-8'), toAddress + '@' + SMTPDOMAIN)
                     else:
