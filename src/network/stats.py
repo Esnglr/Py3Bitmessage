@@ -3,9 +3,9 @@ Network statistics
 """
 import time
 
-from . import asyncore_pollchoose as asyncore
-from . import connectionpool
-from .objectracker import missingObjects
+import asyncore_pollchoose as asyncore
+import urllib3
+from objectracker import missingObjects
 
 
 lastReceivedTimestamp = time.time()
@@ -15,10 +15,22 @@ lastSentTimestamp = time.time()
 lastSentBytes = 0
 currentSentSpeed = 0
 
+# Create a PoolManager instance.
+http = urllib3.PoolManager()
+
+# A list to keep track of connected hosts
+connected_hosts = set()
 
 def connectedHostsList():
     """List of all the connected hosts"""
-    return connectionpool.pool.establishedConnections()
+    return list(connected_hosts)
+
+def make_request(url):
+    """Make a request to a given URL and track the host"""
+    host = urllib3.util.parse_url(url).host
+    connected_hosts.add(host)  # Add the host to the connected hosts list
+    response = http.request('GET', url)
+    return response.data.decode('utf-8')
 
 
 def sentBytes():
