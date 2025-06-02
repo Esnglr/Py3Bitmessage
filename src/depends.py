@@ -9,15 +9,6 @@ import sys
 
 import six
 
-# Only really old versions of Python don't have sys.hexversion. We don't
-# support them. The logging module was introduced in Python 2.3
-if not hasattr(sys, 'hexversion') or sys.hexversion < 0x20300F0:
-    sys.exit(
-        'Python version: %s\n'
-        'PyBitmessage requires Python 2.7.4 or greater (but not Python 3)'
-        % sys.version
-    )
-
 import logging  # noqa:E402
 import subprocess  # nosec B404
 from importlib import import_module
@@ -297,7 +288,7 @@ def check_openssl():
 
     cflags_regex = re.compile(r'(?:OPENSSL_NO_)(AES|EC|ECDH|ECDSA)(?!\w)')
 
-    from . import pyelliptic.openssl
+    import pyelliptic.openssl
 
     for path in paths:
         logger.info('Checking OpenSSL at %s', path)

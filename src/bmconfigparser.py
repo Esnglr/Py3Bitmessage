@@ -10,10 +10,7 @@ from threading import Event
 from six import string_types
 from six.moves import configparser
 
-try:
-    import state
-except ImportError:
-    from pybitmessage import state
+import state
 
 ConfigParser = configparser.ConfigParser
 config_ready = Event()

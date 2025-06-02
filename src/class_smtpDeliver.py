@@ -9,10 +9,10 @@ from email.header import Header
 from six.moves import email_mime_text
 from six.moves.urllib import parse as urlparse
 
-from . import queues
-from . import state
-from .bmconfigparser import config
-from .network.threads import StoppableThread
+import queues
+import state
+from bmconfigparser import config
+from network.threads import StoppableThread
 
 SMTPDOMAIN = "bmaddr.lan"
 

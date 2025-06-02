@@ -26,23 +26,32 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.list import IRightBodyTouch
 from PIL import Image as PilImage
 
-from pybitmessage.bitmessagekivy import identiconGeneration
-from pybitmessage.bitmessagekivy.base_navigation import (
+import numpy as np
+import pydenticon
+# Create a generator
+generator = pydenticon.Generator(
+    rows=5,
+    columns=5,
+    foreground=["#000000"],  # Foreground color
+    background=["#FFFFFF"],  # Background color
+)
+
+from base_navigation import (
     BaseContentNavigationDrawer, BaseIdentitySpinner, BaseLanguage,
     BaseNavigationDrawerDivider, BaseNavigationDrawerSubheader,
     BaseNavigationItem)
-from pybitmessage.bitmessagekivy.baseclass.common import (get_identity_list,
+from baseclass.common import (get_identity_list,
                                                           load_image_path,
                                                           toast)
-from pybitmessage.bitmessagekivy.baseclass.popup import (AddAddressPopup,
+from baseclass.popup import (AddAddressPopup,
                                                          AddressChangingLoader,
                                                          AppClosingPopup)
-from pybitmessage.bitmessagekivy.get_platform import platform
-from pybitmessage.bitmessagekivy.kivy_state import KivyStateVariables
-from pybitmessage.bitmessagekivy.load_kivy_screens_data import load_screen_json
-from pybitmessage.bitmessagekivy.uikivysignaler import UIkivySignaler
-from pybitmessage.bmconfigparser import config  # noqa: F401
-from pybitmessage.mockbm.helper_startup import (
+from get_platform import platform
+from kivy_state import KivyStateVariables
+from load_kivy_screens_data import load_screen_json
+from uikivysignaler import UIkivySignaler
+from bmconfigparser import config  # noqa: F401
+from mockbm.helper_startup import (
     loadConfig, total_encrypted_messages_per_month)
 
 logger = logging.getLogger('default')
@@ -341,7 +350,9 @@ class NavigateApp(MDApp):
 
     def set_identicon(self, text):
         """Show identicon in address spinner"""
-        img = identiconGeneration.generate(text)
+        
+        identicon = generator.generate(text, 240, 240)
+        img = PilImage.fromarray(np.array(identicon))
         self.root.ids.content_drawer.ids.top_box.children[0].texture = img.texture
 
     # pylint: disable=import-outside-toplevel
@@ -440,7 +451,8 @@ class NavigateApp(MDApp):
                         self.image_dir, 'default_identicon', '{}.png'.format(first_addr)
                     )
                 else:
-                    img = identiconGeneration.generate(first_addr)
+                    identicon = generator.generate(first_addr, 240, 240)
+                    img = PilImage.fromarray(np.array(identicon))
                     instance.texture = img.texture
                     return None
         return os.path.join(self.image_dir, 'drawer_logo1.png')

@@ -10,18 +10,15 @@ from threading import Event
 from six import string_types
 from six.moves import configparser
 
-try:
-    import state
-except ImportError:
-    from pybitmessage import state
+import state
 
-SafeConfigParser = configparser.SafeConfigParser
+ConfigParser = configparser.ConfigParser
 config_ready = Event()
 
 
-class BMConfigParser(SafeConfigParser):
+class BMConfigParser(ConfigParser):
     """
-    Singleton class inherited from :class:`configparser.SafeConfigParser`
+    Singleton class inherited from :class:`configparser.ConfigParser`
     with additional methods specific to bitmessage config.
     """
     # pylint: disable=too-many-ancestors
@@ -33,7 +30,7 @@ class BMConfigParser(SafeConfigParser):
                 raise TypeError("option values must be strings")
         if not self.validate(section, option, value):
             raise ValueError("Invalid value %s" % value)
-        return SafeConfigParser.set(self, section, option, value)
+        return ConfigParser.set(self, section, option, value)
 
     def get(self, section, option, **kwargs):
         """Try returning temporary value before using parent get()"""
@@ -41,7 +38,7 @@ class BMConfigParser(SafeConfigParser):
             return self._temp[section][option]
         except KeyError:
             pass
-        return SafeConfigParser.get(
+        return ConfigParser.get(
             self, section, option, **kwargs)
 
     def setTemp(self, section, option, value=None):
@@ -91,7 +88,7 @@ class BMConfigParser(SafeConfigParser):
         # pylint: disable=signature-differs
         """Return section variables as parent,
         but override the "raw" argument to always True"""
-        return SafeConfigParser.items(self, section, True, variables)
+        return ConfigParser.items(self, section, True, variables)
 
     def _reset(self):
         """
@@ -105,10 +102,10 @@ class BMConfigParser(SafeConfigParser):
 
     def read(self, filenames=None):
         self._reset()
-        SafeConfigParser.read(
+        ConfigParser.read(
             self, os.path.join(os.path.dirname(__file__), 'default.ini'))
         if filenames:
-            SafeConfigParser.read(self, filenames)
+            ConfigParser.read(self, filenames)
 
     def addresses(self, sort=False):
         """Return a list of local bitmessage addresses (from section labels)"""

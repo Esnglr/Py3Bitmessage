@@ -15,13 +15,13 @@ from six.moves import http_client as httplib
 from six.moves.urllib.parse import urlparse
 from six.moves.urllib.request import urlopen
 
-from . import queues
-from . import state
-from . import tr
-from .bmconfigparser import config
-from .debug import logger
-from .network import StoppableThread, connectionpool, knownnodes
-from .network.node import Peer
+import queues
+import state
+import tr
+from bmconfigparser import config
+from debug import logger
+from network import StoppableThread, connectionpool, knownnodes
+from network.node import Peer
 
 
 def createRequestXML(service, action, arguments=None):

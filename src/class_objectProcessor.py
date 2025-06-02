@@ -13,26 +13,26 @@ import threading
 import time
 from binascii import hexlify
 
-from . import helper_bitcoin
-from . import helper_inbox
-from . import helper_msgcoding
-from . import helper_sent
-from . import highlevelcrypto
-from . import l10n
-from . import protocol
-from . import queues
-from . import shared
-from . import state
-from .addresses import (
+import helper_bitcoin
+import helper_inbox
+import helper_msgcoding
+import helper_sent
+import highlevelcrypto
+import l10n
+import protocol
+import queues
+import shared
+import state
+from addresses import (
     decodeAddress, decodeVarint,
     encodeAddress, encodeVarint, varintDecodeError
 )
-from .bmconfigparser import config
-from .helper_sql import (
+from bmconfigparser import config
+from helper_sql import (
     sql_ready, sql_timeout, SqlBulkExecute, sqlExecute, sqlQuery)
-from .network import knownnodes, invQueue
-from .network.node import Peer
-from .tr import _translate
+from network import knownnodes, invQueue
+from network.node import Peer
+from tr import _translate
 
 logger = logging.getLogger('default')
 

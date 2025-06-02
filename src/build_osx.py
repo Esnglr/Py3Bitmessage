@@ -1,7 +1,7 @@
 """Building osx."""
 import os
 from glob import glob
-from PyQt4 import QtCore
+from PyQt6 import QtCore
 from setuptools import setup
 
 name = "Bitmessage"
@@ -16,11 +16,11 @@ DATA_FILES = [
     ('ui', glob('bitmessageqt/*.ui')),
     (
         'translations',
-        glob(os.path.join(str(QtCore.QLibraryInfo.location(
+        glob(os.path.join(str(QtCore.QLibraryInfo.path(
             QtCore.QLibraryInfo.TranslationsPath)), 'qt_??.qm'))),
     (
         'translations',
-        glob(os.path.join(str(QtCore.QLibraryInfo.location(
+        glob(os.path.join(str(QtCore.QLibraryInfo.path(
             QtCore.QLibraryInfo.TranslationsPath)), 'qt_??_??.qm'))),
 ]
 

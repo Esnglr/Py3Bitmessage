@@ -11,11 +11,11 @@ import sys
 
 from six.moves import http_client as httplib
 
-from . import defaults
-from .addresses import decodeAddress
-from .bmconfigparser import config
-from .debug import logger
-from .tr import _translate  # translate
+import defaults
+from addresses import decodeAddress
+from bmconfigparser import config
+from debug import logger
+from tr import _translate  # translate
 
 configSection = "bitmessagesettings"
 

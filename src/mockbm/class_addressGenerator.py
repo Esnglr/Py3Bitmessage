@@ -8,10 +8,10 @@ import threading
 
 from six.moves import queue
 
-from pybitmessage import state
-from pybitmessage import queues
+import state
+import queues
 
-from pybitmessage.bmconfigparser import config
+from bmconfigparser import config
 
 # from network.threads import StoppableThread
 

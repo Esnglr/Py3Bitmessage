@@ -4,8 +4,8 @@ Calculates bitcoin and testnet address from pubkey
 
 import hashlib
 
-from .debug import logger
-from .pyelliptic import arithmetic
+from debug import logger
+from pyelliptic import arithmetic
 
 
 def calculateBitcoinAddressFromPubkey(pubkey):

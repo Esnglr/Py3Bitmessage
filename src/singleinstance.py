@@ -8,7 +8,7 @@ import atexit
 import os
 import sys
 
-from . import state
+import state
 
 try:
     import fcntl  # @UnresolvedImport

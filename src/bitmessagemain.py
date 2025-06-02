@@ -13,13 +13,10 @@ import os
 import sys
 
 
-try:
-    from . import pathmagic
-except ImportError:
-    from pybitmessage import pathmagic
+import pathmagic
 app_dir = pathmagic.setup()
 
-from . import depends
+import depends
 depends.check_dependencies()
 
 import getopt
@@ -30,21 +27,21 @@ import threading
 import time
 import traceback
 
-from . import defaults
+import defaults
 # Network subsystem
-from . import network
-from . import shutdown
-from . import state
+import network
+import shutdown
+import state
 
-from .testmode_init import populate_api_test_data
-from .bmconfigparser import config
-from .debug import logger  # this should go before any threads
-from .helper_startup import (
+from testmode_init import populate_api_test_data
+from bmconfigparser import config
+from debug import logger  # this should go before any threads
+from helper_startup import (
     adjustHalfOpenConnectionsLimit, fixSocket, start_proxyconfig)
-from .inventory import Inventory
-from .singleinstance import singleinstance
+from inventory import Inventory
+from singleinstance import singleinstance
 # Synchronous threads
-from .threads import (
+from threads import (
     set_thread_name, printLock,
     addressGenerator, objectProcessor, singleCleaner, singleWorker, sqlThread)
 

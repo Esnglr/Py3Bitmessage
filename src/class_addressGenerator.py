@@ -7,15 +7,15 @@ from binascii import hexlify
 
 from six.moves import configparser, queue
 
-from . import defaults
-from . import highlevelcrypto
-from . import queues
-from . import shared
-from . import state
-from .addresses import decodeAddress, encodeAddress, encodeVarint
-from .bmconfigparser import config
-from .network import StoppableThread
-from .tr import _translate
+import defaults
+import highlevelcrypto
+import queues
+import shared
+import state
+from addresses import decodeAddress, encodeAddress, encodeVarint
+from bmconfigparser import config
+from network import StoppableThread
+from tr import _translate
 
 
 class AddressGeneratorException(Exception):

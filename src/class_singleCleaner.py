@@ -23,12 +23,12 @@ import gc
 import os
 import time
 
-from . import queues
-from . import state
-from .bmconfigparser import config
-from .helper_sql import sqlExecute, sqlQuery
-from .network import connectionpool, knownnodes, StoppableThread
-from .tr import _translate
+import queues
+import state
+from bmconfigparser import config
+from helper_sql import sqlExecute, sqlQuery
+from network import connectionpool, knownnodes, StoppableThread
+from tr import _translate
 
 
 #: Equals 4 weeks. You could make this longer if you want

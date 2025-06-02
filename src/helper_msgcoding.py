@@ -5,10 +5,10 @@ Message encoding end decoding functions
 import string
 import zlib
 
-from . import messagetypes
-from .bmconfigparser import config
-from .debug import logger
-from .tr import _translate
+import messagetypes
+from bmconfigparser import config
+from debug import logger
+from tr import _translate
 
 try:
     import msgpack
@@ -16,7 +16,7 @@ except ImportError:
     try:
         import umsgpack as msgpack
     except ImportError:
-        from . import fallback.umsgpack.umsgpack as msgpack
+        import fallback.umsgpack.umsgpack as msgpack
 
 BITMESSAGE_ENCODING_IGNORE = 0
 BITMESSAGE_ENCODING_TRIVIAL = 1
