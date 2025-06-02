@@ -1,7 +1,7 @@
 """Helper Inbox performs inbox messages related operations"""
 
-from . import queues
-from .helper_sql import sqlExecute, sqlQuery
+import queues
+from helper_sql import sqlExecute, sqlQuery
 
 
 def insert(t):

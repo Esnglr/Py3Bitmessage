@@ -4,7 +4,6 @@ Network statistics
 import time
 
 import asyncore_pollchoose as asyncore
-import urllib3
 from objectracker import missingObjects
 
 

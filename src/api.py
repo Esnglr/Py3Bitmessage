@@ -72,31 +72,31 @@ import six
 from six.moves import configparser, http_client, xmlrpc_server
 from six.moves.reprlib import repr
 
-from . import helper_inbox
-from . import helper_sent
-from . import proofofwork
-from . import protocol
-from . import queues
-from . import shared
-from . import shutdown
-from . import state
-from .addresses import (addBMIfNotPresent, decodeAddress, decodeVarint,
+import helper_inbox
+import helper_sent
+import proofofwork
+import protocol
+import queues
+import shared
+import shutdown
+import state
+from addresses import (addBMIfNotPresent, decodeAddress, decodeVarint,
                        varintDecodeError)
-from .bmconfigparser import config
-from .debug import logger
-from .defaults import (networkDefaultPayloadLengthExtraBytes,
+from bmconfigparser import config
+from debug import logger
+from defaults import (networkDefaultPayloadLengthExtraBytes,
                       networkDefaultProofOfWorkNonceTrialsPerByte)
-from .helper_sql import (SqlBulkExecute, sql_ready, sqlExecute, sqlQuery,
+from helper_sql import (SqlBulkExecute, sql_ready, sqlExecute, sqlQuery,
                         sqlStoredProcedure)
-from .highlevelcrypto import calculateInventoryHash
+from highlevelcrypto import calculateInventoryHash
 
 try:
-    from .network import connectionpool
+    from network import connectionpool
 except ImportError:
     connectionpool = None
 
-from .network import StoppableThread, invQueue, stats
-from .version import softwareVersion
+from network import StoppableThread, invQueue, stats
+from version import softwareVersion
 
 try:  # TODO: write tests for XML vulnerabilities
     from defusedxml.xmlrpc import monkey_patch
@@ -166,7 +166,7 @@ class ErrorCodes(type):
         return result
 
 
-class APIError(xmlrpc_server.Fault, metaclass=ErrorCodes):
+class APIError(xmlrpc_server.Fault):
     """
     APIError exception class
 
@@ -177,6 +177,7 @@ class APIError(xmlrpc_server.Fault, metaclass=ErrorCodes):
        * - Error Number
          - Message
     """
+    __metaclass__ = ErrorCodes
 
     def __str__(self):
         return "API Error %04i: %s" % (self.faultCode, self.faultString)
@@ -292,7 +293,7 @@ class CommandHandler(type):
         result.config = config
         result._handlers = {}
         apivariant = result.config.safeGet('bitmessagesettings', 'apivariant')
-        for func in list(namespace.values()):
+        for func in namespace.values():
             try:
                 for alias in getattr(func, '_cmd'):
                     try:
@@ -1554,14 +1555,14 @@ class BMRPCDispatcher(object):
             raise APIError(21, 'Could not import BMConnectionPool.')
         inboundConnections = []
         outboundConnections = []
-        for i in list(connectionpool.pool.inboundConnections.values()):
+        for i in connectionpool.pool.inboundConnections.values():
             inboundConnections.append({
                 'host': i.destination.host,
                 'port': i.destination.port,
                 'fullyEstablished': i.fullyEstablished,
                 'userAgent': str(i.userAgent)
             })
-        for i in list(connectionpool.pool.outboundConnections.values()):
+        for i in connectionpool.pool.outboundConnections.values():
             outboundConnections.append({
                 'host': i.destination.host,
                 'port': i.destination.port,
@@ -1622,13 +1623,13 @@ class BMRPCDispatcher(object):
             if 'argument' not in str(e):
                 raise APIError(21, msg)
             argcount = len(params)
-            maxcount = func.__code__.co_argcount
+            maxcount = func.func_code.co_argcount
             if argcount > maxcount:
                 msg = (
                     'Command %s takes at most %s parameters (%s given)'
                     % (method, maxcount, argcount))
             else:
-                mincount = maxcount - len(func.__defaults__ or [])
+                mincount = maxcount - len(func.func_defaults or [])
                 if argcount < mincount:
                     msg = (
                         'Command %s takes at least %s parameters (%s given)'
@@ -1661,7 +1662,7 @@ class BMRPCDispatcher(object):
 
     def _listMethods(self):
         """List all API commands"""
-        return list(self._handlers.keys())
+        return self._handlers.keys()
 
     def _methodHelp(self, method):
         return self._handlers[method].__doc__

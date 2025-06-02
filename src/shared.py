@@ -18,12 +18,12 @@ from binascii import hexlify
 from six.moves.reprlib import repr
 
 # Project imports.
-from . import highlevelcrypto
-from . import state
-from .addresses import decodeAddress, encodeVarint
-from .bmconfigparser import config
-from .debug import logger
-from .helper_sql import sqlQuery
+import highlevelcrypto
+import state
+from addresses import decodeAddress, encodeVarint
+from bmconfigparser import config
+from debug import logger
+from helper_sql import sqlQuery
 
 myECCryptorObjects = {}
 MyECSubscriptionCryptorObjects = {}

@@ -12,17 +12,17 @@ import tempfile
 import time
 from struct import pack, unpack
 
-from . import highlevelcrypto
-from . import openclpow
-from . import paths
-from . import queues
-from . import state
-from .bmconfigparser import config
-from .debug import logger
-from .defaults import (
+import highlevelcrypto
+import openclpow
+import paths
+import queues
+import state
+from bmconfigparser import config
+from debug import logger
+from defaults import (
     networkDefaultProofOfWorkNonceTrialsPerByte,
     networkDefaultPayloadLengthExtraBytes)
-from .tr import _translate
+from tr import _translate
 
 
 bitmsglib = 'bitmsghash.so'

@@ -5,9 +5,9 @@ This module is for generating ack payload
 from binascii import hexlify
 from struct import pack
 
-from . import helper_random
-from . import highlevelcrypto
-from .addresses import encodeVarint
+import helper_random
+import highlevelcrypto
+from addresses import encodeVarint
 
 
 def genAckPayload(streamNumber=1, stealthLevel=0):
