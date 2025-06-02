@@ -19,6 +19,12 @@ separate issue.
 
 All commits and tags required to be signed with GPG key.
 
+Radicle
+----------
+To clone this repository on [Radicle](https://radicle.xyz), simply run:
+
+    `rad clone rad:zmgp6ZmYFgGkuSZmHwH48QL3MwV6`
+
 References
 ----------
 * [Project Website](https://bitmessage.org)
